@@ -79,7 +79,7 @@
              <h3>Algorithm Steps</h3>
             <ol>
                 <li>Downscale both the reference image and the image to align using multiple scaling factors. Starting with the coarsest (smallest) image and working to the finest (full resolution).</li>
-                <li>Crop 10% of the image borders at each scale to focus on the central region.</li>
+                <li>Similarly to single scale, crop 10% of the image borders at each scale to focus on the central region.</li>
                 <li>At each scale, search for the best displacement (shift) by trying different pixel shifts in height and width directions.</li>
                 <li>For each shift, calculate a similarity score using normalized cross-correlation.</li>
                 <li>Once the best displacement is found at a coarse scale, adjust the search range for the next finer scale using the best shift found so far.</li>
