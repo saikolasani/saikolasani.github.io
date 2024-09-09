@@ -141,53 +141,88 @@
             <div class="gallery-container">
                 <div class="gallery">
                     <figure class="gallery-item">
-                        <img src="assets/emir.jpg" alt="High Res Image 1">
+                        <img src="assets/emir.jpg" alt="emir">
                         <figcaption>R Shift: (-200, 104), G Shift: (24, 48)</figcaption>
                     </figure>
                     <figure class="gallery-item">
-                        <img src="assets/church.jpg" alt="High Res Image 2">
+                        <img src="assets/church.jpg" alt="church">
                         <figcaption>R Shift: (-8, 56), G Shift: (0, 24)</figcaption>
                     </figure>
                     <figure class="gallery-item">
-                        <img src="assets/harvesters.jpg" alt="High Res Image 3">
+                        <img src="assets/harvesters.jpg" alt="harvesters">
                         <figcaption>R Shift: (16, 120), G Shift: (16, 56)</figcaption>
                     </figure>
                     <figure class="gallery-item">
-                        <img src="assets/icon.jpg" alt="High Res Image 3">
+                        <img src="assets/icon.jpg" alt="icon">
                         <figcaption>R Shift: (24, 88), G Shift: (16, 40)</figcaption>
                     </figure>
                     <figure class="gallery-item">
-                        <img src="assets/lady.jpg" alt="High Res Image 3">
+                        <img src="assets/lady.jpg" alt="lady">
                         <figcaption>R Shift: (8, 112), G Shift: (8, 48)</figcaption>
                     </figure>
                     <figure class="gallery-item">
-                        <img src="assets/melons.jpg" alt="High Res Image 3">
+                        <img src="assets/melons.jpg" alt="melons">
                         <figcaption>R Shift: (8, 176), G Shift: (8, 80)</figcaption>
                     </figure>
                     <figure class="gallery-item">
-                        <img src="assets/onion_church.jpg" alt="High Res Image 3">
+                        <img src="assets/onion_church.jpg" alt="onion_church">
                         <figcaption>R Shift: (36, 108), G Shift: (24, 48)</figcaption>
                     </figure>
                     <figure class="gallery-item">
-                        <img src="assets/sculpture.jpg" alt="High Res Image 3">
+                        <img src="assets/sculpture.jpg" alt="sculpture">
                         <figcaption>R Shift: (-24, 136), G Shift: (-8, 32)</figcaption>
                     </figure>
                     <figure class="gallery-item">
-                        <img src="assets/self_portrait.jpg" alt="High Res Image 3">
+                        <img src="assets/self_portrait.jpg" alt="self_portrait">
                         <figcaption>R Shift: (40, 176), G Shift: (32, 80)</figcaption>
                     </figure>
                     <figure class="gallery-item">
-                        <img src="assets/three_generations.jpg" alt="High Res Image 3">
+                        <img src="assets/three_generations.jpg" alt="three_generations">
                         <figcaption>R Shift: (8, 112), G Shift: (16, 56)</figcaption>
                     </figure>
                     <figure class="gallery-item">
-                        <img src="assets/train.jpg" alt="High Res Image 3">
+                        <img src="assets/train.jpg" alt="train">
                         <figcaption>R Shift: (32, 88), G Shift: (8, 40)</figcaption>
+                    </figure>
+                </div>
+            </div>
+            <h3>Notes:</h3>
+            <p>One thing to notice is that the Emir picture does not seem to have aligned properly while the 
+                rest of the images look good. This is most likely because the blue plate was used as the reference for matching, 
+                and in this case there was a very high amount of blue, but a very low amount of green. So aligning the red and blue to the 
+                green fixes the issue in this case.</p>
+        </section>
+    </div>
+
+    <div class="section-wrapper">
+        <section id="bells & whistles">
+            <h2>Bells & Whistles</h2>
+            <p> In order to fix the issue with Emir, I used the Structural Similarity Index Measure (SSIM)
+                as the scoring metric. This fixed the issue with the Emir picture as can be shown below. Furthermore,
+                the shifts seemed fairly the same for the rest of the images. Due to this, in the general case it is 
+                much faster to use NCC than SSIM, but SSIM seems to produce better reults.
+            </p>
+
+            <h3>NCC vs SSIM</h3>
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/cathedral.jpg" alt="Low Res Image 1">
+                        <figcaption>R Shift: (3, 11), G Shift: (2, 5)</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/ssim_cathedral.jpg" alt="Low Res Image 2">
+                        <figcaption>R Shift: (2, 3), G Shift: (2, -3)</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/tobolsk.jpg" alt="Low Res Image 3">
+                        <figcaption>R Shift: (3, 6), G Shift: (3, 3)</figcaption>
                     </figure>
                 </div>
             </div>
         </section>
     </div>
+
 </main>
 
 
