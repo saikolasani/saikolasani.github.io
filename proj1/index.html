@@ -61,9 +61,14 @@
 
     <!-- Single Channel Section -->
     <div class="section-wrapper">
-        <section id="single-channel">
-            <h2>Single Channel</h2>
-            <p>In single-channel processing, we handle data from one source or input. This can include audio signals, image channels, or time-series data where the information is transmitted or recorded through a single path.</p>
+        <section id="singlescale">
+            <h2>Single Scale Alignment</h2>
+            <p>For images with lower resolutions, the easiest way to align the three-channel images is to exhaustively search over a window of possible displacements and score each using a metric. 
+                We can then take the displacement with the best score. As suggested in the project description, I used a displacement range of [-15,15] pixels.
+                Regarding the scoring metric, I experimented with the Sum of Absolute Difference (SAD) and Normalized Cross Correlation (NCC). 
+                I found that SAD performed better for the single-scale alignment. However, the images were still not very well aligned. To further improve performance, 
+                I decided to crop the borders of the images by 10%. This improved the performance tremendously.
+            </p>
         </section>
     </div>
 
