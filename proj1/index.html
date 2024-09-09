@@ -100,7 +100,7 @@
                 We can then take the displacement with the best score. As suggested in the project description, I used a displacement range of [-15,15] pixels.
                 I experimented with the Sum of Absolute Difference (SAD) and Normalized Cross Correlation (NCC) regarding the scoring metric. 
                 I found that SAD performed better for the single-scale alignment. However, the images were still not very well aligned. To further improve performance, 
-                I decided to crop the borders of the images by 10%. This improved the performance tremendously.
+                I decided to crop the borders of the images by 10%. Furthermore, I also parallelized the code using a ThreadPoolExecutor and the map function, which improved the speed by a decent margin.
             </p>
             <h3>Low Resolution Image Gallery</h3>
             <div class="gallery-container">
@@ -131,12 +131,13 @@
              <h3>Algorithm Steps</h3>
             <ol>
                 <li>Downscale both the reference image and the image to align using multiple scaling factors. Starting with the coarsest (smallest) image and working to the finest (full resolution).</li>
-                <li>Similarly to single scale, crop 10% of the image borders at each scale to focus on the central region.</li>
+                <li>Similarly to the single scale implementation, crop 10% of the image borders at each scale to focus on the central region.</li>
                 <li>At each scale, search for the best displacement (shift) by trying different pixel shifts in height and width directions.</li>
                 <li>For each shift, calculate a similarity score using normalized cross-correlation.</li>
                 <li>Once the best displacement is found at a coarse scale, adjust the search range for the next finer scale using the best shift found so far.</li>
                 <li>After refining the alignment at all scales, apply the final best displacement to the original image to align it with the reference image.</li>
             </ol>
+            <p>As before, I also parallelized the code using a ThreadPoolExecutor to improve the speed to roughly 30s per picture, whereas before, it would take up to 2 minutes.</p>
             <h3>High Resolution Image Gallery</h3>
             <div class="gallery-container">
                 <div class="gallery">
