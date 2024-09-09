@@ -27,10 +27,10 @@
             color: #000000;
         }
         .container {
-            display: block; /* Ensures sections are stacked */
+            display: block; 
         }
         .section-wrapper {
-            width: 100%; /* Ensures sections take full width */
+            width: 100%; 
             padding: 10px;
         }
         footer {
@@ -74,8 +74,17 @@
         <section id="multiscale">
             <h2>Multi Scale Alignment</h2>
             <p>However, the exhaustive search would become too computationally expensive for images with higher resolutions and larger displacements.
-                To combat this issue, I implemented an Image pyramid which searches for shifts in multiple scales.
+                To combat this issue, I implemented an Image pyramid that searches for shifts in multiple scales. 
             </p>
+             <h3>Algorithm Steps</h3>
+            <ol>
+                <li>Downscale both the reference image and the image to align using multiple scaling factors. Starting with the coarsest (smallest) image and working to the finest (full resolution).</li>
+                <li>Crop 10% of the image borders at each scale to focus on the central region.</li>
+                <li>At each scale, search for the best displacement (shift) by trying different pixel shifts in height and width directions.</li>
+                <li>For each shift, calculate a similarity score using normalized cross-correlation.</li>
+                <li>Once the best displacement is found at a coarse scale, adjust the search range for the next finer scale using the best shift found so far.</li>
+                <li>After refining the alignment at all scales, apply the final best displacement to the original image to align it with the reference image.</li>
+            </ol>
         </section>
     </div>
 </main>
