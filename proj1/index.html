@@ -49,6 +49,30 @@
             border: 1px solid #ddd;
             border-radius: 4px;
         }
+        .gallery-container {
+            margin: 20px;
+        }
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+        .gallery-item {
+            max-width: 300px;
+            text-align: center;
+        }
+        .gallery-item img {
+            width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        figcaption {
+            margin-top: 8px;
+            font-size: 14px;
+            color: #555;
+        }
         
     </style>
 </head>
@@ -78,12 +102,21 @@
                 I found that SAD performed better for the single-scale alignment. However, the images were still not very well aligned. To further improve performance, 
                 I decided to crop the borders of the images by 10%. This improved the performance tremendously.
             </p>
-            <div class="image-container">
-                <img src="assets/cathedral.jpg" alt="Before Image">
-                <img src="assets/cathedral.jpg" alt="After Image">
-                <div class="text-box">
-                    <p>Value 1: 123</p>
-                    <p>Value 2: 456</p>
+            <h2>Low Resolution Image Gallery</h2>
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/cathedral.jpg" alt="Low Res Image 1">
+                        <figcaption>Shift 1:</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/monastery.jpg" alt="Low Res Image 2">
+                        <figcaption>Shift 2:</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/tobolsk.jpg" alt="Low Res Image 3">
+                        <figcaption>Shift 3:</figcaption>
+                    </figure>
                 </div>
             </div>
         </section>
