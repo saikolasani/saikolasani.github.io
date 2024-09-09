@@ -33,12 +33,23 @@
             width: 100%; 
             padding: 10px;
         }
-        footer {
-            background-color: #f1f1f1;
-            text-align: center;
-            padding: 1rem;
-            margin-top: 2rem;
+        .image-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
+        .image-container img {
+            width: 45%; /* Adjusts the width of the images */
+            height: auto;
+        }
+        .text-box {
+            width: 100px; /* Width of the text box */
+            margin-left: 10px; /* Spacing between the image and the text box */
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
     </style>
 </head>
 <body>
@@ -67,6 +78,14 @@
                 I found that SAD performed better for the single-scale alignment. However, the images were still not very well aligned. To further improve performance, 
                 I decided to crop the borders of the images by 10%. This improved the performance tremendously.
             </p>
+            <div class="image-container">
+                <img src="assets/cathedral.jpg" alt="Before Image">
+                <img src="images/cathedral.jpg" alt="After Image">
+                <div class="text-box">
+                    <p>Value 1: 123</p>
+                    <p>Value 2: 456</p>
+                </div>
+            </div>
         </section>
     </div>
 
