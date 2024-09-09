@@ -187,9 +187,8 @@
                 </div>
             </div>
             <h3>Notes:</h3>
-            <p>One thing to notice is that the Emir picture does not seem to have aligned properly while the 
-                rest of the images look good. This is most likely because the blue plate was used as the reference for matching, 
-                and in this case there was a very high amount of blue, but a very low amount of green. So aligning the red and blue to the 
+            <p>One thing to notice is that the Emir picture does not seem to have aligned properly, while the rest of the images look good. This is most likely because the blue plate was used as the reference for matching, 
+                In this case, there was a very high amount of blue but a meager amount of green. So, aligning the red and blue to the 
                 green fixes the issue in this case.</p>
         </section>
     </div>
@@ -197,10 +196,10 @@
     <div class="section-wrapper">
         <section id="bells & whistles">
             <h2>Bells & Whistles</h2>
-            <p> In order to fix the issue with Emir, I used the Structural Similarity Index Measure (SSIM)
-                as the scoring metric. This fixed the issue with the Emir picture as can be shown below. Furthermore,
-                the shifts seemed fairly the same for the rest of the images. Due to this, in the general case it is 
-                much faster to use NCC than SSIM, but SSIM seems to produce better results.
+            <p> To fix the issue with the Emir picture, I used the Structural Similarity Index Measure (SSIM)
+                as the scoring metric. This fixed the issue with the Emir picture, which can be seen below. Furthermore,
+                the shifts seemed fairly the same for the rest of the images. Due to this, using NCC is generally
+                much faster than SSIM, but SSIM produces better results.
             </p>
 
             <h3>NCC vs SSIM</h3>
@@ -208,11 +207,13 @@
                 <div class="gallery">
                     <figure class="gallery-item">
                         <img src="assets/emir.jpg" alt="emir ncc image">
-                        <figcaption>R Shift: (-200, 104), G Shift: (24, 48)</figcaption>
+                        <figcaption> NCC Picture:
+                            R Shift: (-200, 104), G Shift: (24, 48)</figcaption>
                     </figure>
                     <figure class="gallery-item">
                         <img src="assets/ssim_emir.jpg" alt="emir ssim image">
-                        <figcaption>R Shift: (40, 105), G Shift: (24, 48)</figcaption>
+                        <figcaption> SSIM Picture: 
+                            R Shift: (40, 105), G Shift: (24, 48)</figcaption>
                     </figure>
                     
                 </div>
