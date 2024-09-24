@@ -227,51 +227,63 @@
     </div>
 
     <div class="section-wrapper">
-        <section id="fdo">
-            <h2>Fun with Filters</h2>
-            <h3>Finite Difference Operator</h3>
-            <p>Finite Difference Operators help detect edges by highlighting regions where pixel intensity changes rapidly, which usually corresponds to edges or boundaries in the image.
-                In two-dimensional images, the finite difference operator computes the derivative in both the horizontal (x) and vertical (y) directions. These derivatives are calculated using simple convolution filters, such as:
+        <section id="sharp">
+            <h2>Image "Sharpening"</h2>
+            <h3>Unsharp Masking Technique</h3>
+            <p> We can sharpen images by adding more high frequencies to the image. We do this using the unsharp masking technique. We first use a low pass filter (Gaussian) 
+                to retain only the low frequencies. Then we subtract the low frequences from the original image to get only the high frequencies. These details are then emphasized in the final image through 
+                result = target + alpha * details where alpha is a sharpening factor.
             </p>
-            <ul>
-                <li><strong>Dx = [1, -1]</strong>: for detecting horizontal changes (vertical edges).</li>
-                <li><strong>Dy = [[1], [-1]]</strong>: for detecting vertical changes (horizontal edges).</li>
-            </ul>
-            <p>
-                When these operators are applied to an image, they produce two gradient images:
-            </p>
-            <ul>
-                <li>The gradient in the <strong>x-direction</strong> highlights vertical edges.</li>
-                <li>The gradient in the <strong>y-direction</strong> highlights horizontal edges.</li>
-            </ul>
-            <p>
-                By combining these gradients we can produce an edge-detection image that reveals significant changes in intensity.
-            </p>
-            <h3>Results</h3>
+            <h3>Taj Mahal</h3>
+            <p>For the Taj Mahal image, I chose to use a sharpening factor of 2.0. As can be seen below, the edges of the build as well as the structures of the trees were emphasized.</p>
             <div class="gallery-container">
                 <div class="gallery">
                     <figure class="gallery-item">
-                        <img src="assets/cameraman.png" alt="Cameraman Image">
+                        <img src="assets/taj.jpg" alt="Orignal Taj Mahal Image">
                         <figcaption>Original Image</figcaption>
                     </figure>
                     <figure class="gallery-item">
-                        <img src="assets/PartialX.jpg" alt="XGradient">
-                        <figcaption>Dx</figcaption>
-                    </figure>
-                    <figure class="gallery-item">
-                        <img src="assets/PartialY.jpg" alt="YGradient">
-                        <figcaption>Dy</figcaption>
-                    </figure>
-                    <figure class="gallery-item">
-                        <img src="assets/GradCombined.jpg" alt="Combined Gradients">
-                        <figcaption>Combined Gradients</figcaption>
-                    </figure>
-                    <figure class="gallery-item">
-                        <img src="assets/BinaryEdge.jpg" alt="Binarized Image">
-                        <figcaption>Binarized Image</figcaption>
+                        <img src="assets/SharpenedTaj.jpg" alt="Sharpened Taj Mahal Image">
+                        <figcaption>Sharpened Image</figcaption>
                     </figure>
                 </div>
             </div>
+            <h3>Bee + Flower</h3>
+            <p>For the Bee on Flower image, I chose to use a sharpening factor of 5.0. As can be seen below, the edges of the flower as well as the outline of the bee were emphasized.
+                The sharpened image is much more clear than the orignal image.
+            </p>
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/beedaisy.jpg" alt="Orignal Bee on Daisy Image">
+                        <figcaption>Original Image</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/sharpenedbeedaisy.jpg" alt="Sharpened Bee on Daisy Image">
+                        <figcaption>Sharpened Image</figcaption>
+                    </figure>
+                </div>
+            </div>
+            <h3>Resharpening a Blurred Image</h3>
+            <p>For this examole, I took a sharp image of a cat, then I blurred it, and then sharpened it again. As can be seen, the resharpened image looks sharper than the orgininal image on the 
+                edges such as the cat's whiskers and eyes. But we still lose some detail in the fur of the cat.</p>
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/sharpcat.jpeg" alt="Orignal Cat Image">
+                        <figcaption>Original Image</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/blurredcat.jpg" alt="Blurred Cat Image">
+                        <figcaption>Blurred Image</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/sharpenedcat.jpg" alt="Sharpened Cat Image">
+                        <figcaption>Sharpened Image</figcaption>
+                    </figure>
+                </div>
+            </div>
+            
         </section>
     </div>
 
