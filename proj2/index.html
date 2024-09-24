@@ -210,7 +210,7 @@
             </div>
 
             <h3>Comparison</h3>
-            <div class="gallery-container"></div>
+            <div class="gallery-container">
                 <div class="gallery">
                     <figure class="gallery-item">
                         <img src="assets/GausBinaryEdge.jpg" alt="Binarized Image">
@@ -223,6 +223,55 @@
                 </div>
             </div>
             <p>As can be seen the two images are identical apart from a few slight differences in length and shape of minor edges.</p>
+        </section>
+    </div>
+
+    <div class="section-wrapper">
+        <section id="fdo">
+            <h2>Fun with Filters</h2>
+            <h3>Finite Difference Operator</h3>
+            <p>Finite Difference Operators help detect edges by highlighting regions where pixel intensity changes rapidly, which usually corresponds to edges or boundaries in the image.
+                In two-dimensional images, the finite difference operator computes the derivative in both the horizontal (x) and vertical (y) directions. These derivatives are calculated using simple convolution filters, such as:
+            </p>
+            <ul>
+                <li><strong>Dx = [1, -1]</strong>: for detecting horizontal changes (vertical edges).</li>
+                <li><strong>Dy = [[1], [-1]]</strong>: for detecting vertical changes (horizontal edges).</li>
+            </ul>
+            <p>
+                When these operators are applied to an image, they produce two gradient images:
+            </p>
+            <ul>
+                <li>The gradient in the <strong>x-direction</strong> highlights vertical edges.</li>
+                <li>The gradient in the <strong>y-direction</strong> highlights horizontal edges.</li>
+            </ul>
+            <p>
+                By combining these gradients we can produce an edge-detection image that reveals significant changes in intensity.
+            </p>
+            <h3>Results</h3>
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/cameraman.png" alt="Cameraman Image">
+                        <figcaption>Original Image</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/PartialX.jpg" alt="XGradient">
+                        <figcaption>Dx</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/PartialY.jpg" alt="YGradient">
+                        <figcaption>Dy</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/GradCombined.jpg" alt="Combined Gradients">
+                        <figcaption>Combined Gradients</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/BinaryEdge.jpg" alt="Binarized Image">
+                        <figcaption>Binarized Image</figcaption>
+                    </figure>
+                </div>
+            </div>
         </section>
     </div>
 
