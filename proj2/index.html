@@ -39,7 +39,7 @@
             justify-content: space-between;
         }
         .image-container img {
-            width: 45%; /* Adjusts the width of the images */
+            width: auto; /* Adjusts the width of the images */
             height: auto;
         }
         .text-box {
@@ -55,16 +55,20 @@
         .gallery {
             display: flex;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 20px;
             justify-content: center;
         }
+
         .gallery-item {
-            max-width: 300px;
+            width: 300px;  /* Fixed width for all gallery items */
+            height: 300px; /* Fixed height for all gallery items */
             text-align: center;
         }
+
         .gallery-item img {
-            width: 100%;
-            height: auto;
+            width: 300px;  /* Ensure the image takes the full width of its container */
+            height: 300px; /* Ensure the image takes the full height of its container */
+            object-fit: contain;  /* Ensure the image fits without being distorted or cropped */
             border: 1px solid #ddd;
             border-radius: 5px;
         }
@@ -96,7 +100,7 @@
     </div>
 
     <div class="section-wrapper">
-        <section id="singlescale">
+        <section id="fdo">
             <h2>Fun with Filters</h2>
             <h3>Finite Difference Operator</h3>
             <p>Finite Difference Operators help detect edges by highlighting regions where pixel intensity changes rapidly, which usually corresponds to edges or boundaries in the image.
@@ -119,7 +123,7 @@
             <h3>Results</h3>
             <div class="gallery-container">
                 <div class="gallery">
-                    <figure class="gallery-item"></figure>
+                    <figure class="gallery-item">
                         <img src="assets/cameraman.png" alt="Cameraman Image">
                         <figcaption>Original Image</figcaption>
                     </figure>
@@ -135,7 +139,7 @@
                         <img src="assets/GradCombined.jpg" alt="Combined Gradients">
                         <figcaption>Combined Gradients</figcaption>
                     </figure>
-                    <figure class="gallery-item"></figure>
+                    <figure class="gallery-item">
                         <img src="assets/BinaryEdge.jpg" alt="Binarized Image">
                         <figcaption>Binarized Image</figcaption>
                     </figure>
@@ -145,118 +149,73 @@
     </div>
 
     <div class="section-wrapper">
-        <section id="multiscale">
-            <h2>Multi Scale Alignment</h2>
-            <p>However, the exhaustive search would become too computationally expensive for images with higher resolutions and larger displacements.
-                To combat this issue, I implemented an Image pyramid that searches for shifts in multiple scales. 
+        <section id="DoG">
+            <h2>Derivative of Gaussian (DoG) Filter</h2>
+            <h3>Blurred Finite Difference</h3>
+            <p>A Gaussian filter is applied to the image to reduce noise and small details. I chose to use a kernel of size 5 with sigma = 1 created using cv2.getGaussianKernel.
+                I Created a blurred version of the original image by convolving with the gaussian and repeating the procedure in the previous part.
             </p>
-             <h3>Algorithm Steps</h3>
-            <ol>
-                <li>Downscale both the reference image and the image to align using multiple scaling factors. Starting with the coarsest (smallest) image and working to the finest (full resolution).</li>
-                <li>Similarly to the single scale implementation, crop 10% of the image borders at each scale to focus on the central region.</li>
-                <li>At each scale, search for the best displacement (shift) by trying different pixel shifts in height and width directions.</li>
-                <li>For each shift, calculate a similarity score using normalized cross-correlation.</li>
-                <li>Once the best displacement is found at a coarse scale, adjust the search range for the next finer scale using the best shift found so far.</li>
-                <li>After refining the alignment at all scales, apply the final best displacement to the original image to align it with the reference image.</li>
-            </ol>
-            <p>As before, I also parallelized the code using a ThreadPoolExecutor to improve the speed to roughly 30s per picture, whereas before, it would take up to 2 minutes.</p>
-            <h3>High Resolution Image Gallery</h3>
-            <div class="gallery-container">
+
+            <p>There are some very noticeble differences between the two methods. The binarized edges are much thicker and more prominent than before. Furthermore, some of the uncessary details
+                details near the bottom of the pictures are removed and the fine details from the camera are also gone.
+            </p>
+            <div class="gallery-container"></div>
                 <div class="gallery">
                     <figure class="gallery-item">
-                        <img src="assets/emir.jpg" alt="emir">
-                        <figcaption>R Shift: (-240, 96), G Shift: (24, 48)</figcaption>
+                        <img src="assets/cameraman.png" alt="Cameraman Image">
+                        <figcaption>Original Image</figcaption>
                     </figure>
                     <figure class="gallery-item">
-                        <img src="assets/church.jpg" alt="church">
-                        <figcaption>R Shift: (-8, 56), G Shift: (0, 24)</figcaption>
+                        <img src="assets/GausPartialX.jpg" alt="XGradient">
+                        <figcaption>Dx</figcaption>
                     </figure>
                     <figure class="gallery-item">
-                        <img src="assets/harvesters.jpg" alt="harvesters">
-                        <figcaption>R Shift: (16, 120), G Shift: (16, 56)</figcaption>
+                        <img src="assets/GausPartialY.jpg" alt="YGradient">
+                        <figcaption>Dy</figcaption>
                     </figure>
                     <figure class="gallery-item">
-                        <img src="assets/icon.jpg" alt="icon">
-                        <figcaption>R Shift: (24, 88), G Shift: (16, 40)</figcaption>
+                        <img src="assets/GausGradCombined.jpg" alt="Combined Gradients">
+                        <figcaption>Combined Gradients</figcaption>
                     </figure>
                     <figure class="gallery-item">
-                        <img src="assets/lady.jpg" alt="lady">
-                        <figcaption>R Shift: (8, 112), G Shift: (8, 48)</figcaption>
-                    </figure>
-                    <figure class="gallery-item">
-                        <img src="assets/melons.jpg" alt="melons">
-                        <figcaption>R Shift: (8, 176), G Shift: (8, 80)</figcaption>
-                    </figure>
-                    <figure class="gallery-item">
-                        <img src="assets/onion_church.jpg" alt="onion_church">
-                        <figcaption>R Shift: (40, 104), G Shift: (24, 48)</figcaption>
-                    </figure>
-                    <figure class="gallery-item">
-                        <img src="assets/sculpture.jpg" alt="sculpture">
-                        <figcaption>R Shift: (-24, 136), G Shift: (-8, 32)</figcaption>
-                    </figure>
-                    <figure class="gallery-item">
-                        <img src="assets/self_portrait.jpg" alt="self_portrait">
-                        <figcaption>R Shift: (40, 176), G Shift: (32, 80)</figcaption>
-                    </figure>
-                    <figure class="gallery-item">
-                        <img src="assets/three_generations.jpg" alt="three_generations">
-                        <figcaption>R Shift: (8, 112), G Shift: (16, 56)</figcaption>
-                    </figure>
-                    <figure class="gallery-item">
-                        <img src="assets/train.jpg" alt="train">
-                        <figcaption>R Shift: (32, 88), G Shift: (8, 40)</figcaption>
+                        <img src="assets/GausBinaryEdge.jpg" alt="Binarized Image">
+                        <figcaption>Binarized Image</figcaption>
                     </figure>
                 </div>
             </div>
-            <h3>Notes:</h3>
-            <p>One thing to notice is that the Emir picture does not seem to have aligned properly, while the rest of the images look good. This is most likely because the blue plate was used as the reference for matching, 
-                In this case, there was a very high amount of blue but a meager amount of green. So, aligning the red and blue to the 
-                green fixes the issue in this case.</p>
-        </section>
-    </div>
-
-    <div class="section-wrapper">
-        <section id="bells & whistles">
-            <h2>Bells & Whistles</h2>
-            <p> To fix the issue with the Emir picture, I used the Structural Similarity Index Measure (SSIM)
-                as the scoring metric. This fixed the issue with the Emir picture, which can be seen below. Furthermore,
-                the shifts seemed fairly the same for the rest of the images. Due to this, using NCC is generally
-                much faster than SSIM, but SSIM produces better results.
+            
+            <h3>Derivative of Gaussian (DoG)</h3>
+            <p>An other method is to do the same thing with a single convolution instead of two by creating a derivative of gaussian filters. the Gaussian kernels used to blur the image are 
+                instead convolved beforehand using the dx and dy kernels to produce dx_gaussian and dy_gaussian. We then convolute the original image with the new filters.
             </p>
-
-            <h3>NCC vs SSIM</h3>
-            <div class="gallery-container">
+            <div class="gallery-container"></div>
                 <div class="gallery">
                     <figure class="gallery-item">
-                        <img src="assets/emir.jpg" alt="emir ncc image">
-                        <figcaption> NCC Picture:
-                            R Shift: (-240, 96), G Shift: (24, 48)</figcaption>
+                        <img src="assets/cameraman.png" alt="Cameraman Image">
+                        <figcaption>Original Image</figcaption>
                     </figure>
                     <figure class="gallery-item">
-                        <img src="assets/ssim_emir.jpg" alt="emir ssim image">
-                        <figcaption> SSIM Picture: 
-                            R Shift: (40, 104), G Shift: (24, 48)</figcaption>
-                    </figure>
-                    
-                </div>
-                <div class="gallery">
-                    <figure class="gallery-item">
-                        <img src="assets/three_generations.jpg" alt="three_generations ncc image">
-                        <figcaption> NCC Picture:
-                            R Shift: (8, 112), G Shift: (16, 56)</figcaption>
+                        <img src="assets/DoGX.jpg" alt="X Filter">
+                        <figcaption>Dx</figcaption>
                     </figure>
                     <figure class="gallery-item">
-                        <img src="assets/ssim_three_generations.jpg" alt="three_generations ssim image">
-                        <figcaption> SSIM Picture: 
-                            R Shift: (8, 112), G Shift: (16, 48)</figcaption>
+                        <img src="assets/DoGY.jpg" alt="Y Filter">
+                        <figcaption>Dy</figcaption>
                     </figure>
-                    
+                    <figure class="gallery-item">
+                        <img src="assets/DoGGradCombined.jpg" alt="Combined Gradients">
+                        <figcaption>Combined Gradients</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/DoGBinaryEdge.jpg" alt="Binarized Image">
+                        <figcaption>Binarized Image</figcaption>
+                    </figure>
                 </div>
             </div>
         </section>
     </div>
 
+    
 </main>
 
 
