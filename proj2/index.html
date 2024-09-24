@@ -287,9 +287,99 @@
         </section>
     </div>
 
+    <div class="section-wrapper"></div>
+        <section id="hybrid">
+            <h2>Hybrid Images</h2>
+            <h3>Approach</h3>
+            <p> The goal of this part of the assignment is to create hybrid images. Hybrid images change in interpretation based on the viewing distance. 
+                This is based on the idea that high frequency tends to dominate when viewing distance is closer, but, at a distance, only the low frequency part of the signal can be seen. 
+                By blending the high frequency portion of one image with the low-frequency portion of another, you get a hybrid image that leads to different interpretations at different distances.
+                For a low-pass filter, I used a standard 2D Gaussian filter. For a high-pass filter, I used the original image minus the low frequencies. Since both images are different, they require 
+                the use of different kernel sizes and sigmas for the Gaussians. 
+            </p>
+            <h3>Derek + Cat</h3>
+            <p>For the Dererk Cat hybrid image, I chose to use a sigma of 5 and kernel size of 10 for Derek. For the cat I chose to use a sigma of 15 and kernel size of 13. 
+                As can be seen below, from close up we are able to see the features of the cat dominate the picture. However, as we go further back we are only able to see Derek properly.</p>
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/DerekPicture.jpg" alt="Original Derek Image">
+                        <figcaption>Low Frequency Image</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/nutmeg.jpg" alt="Original Nutmeg (cat) Image">
+                        <figcaption>High Frequency Image</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/hybridmancat.jpg" alt="Hybrid Man Cat Image">
+                        <figcaption>Hybrid Image</figcaption>
+                    </figure>
+                </div>
+            </div>
+            <h3>Starry Night + Mountain Landscape (My Favorite)</h3>
+            <p>For the Starry Night Mountain hybrid image, I chose to use a sigma of 2 and kernel size of 10 for the Mountain Landscape. For the Starry Night painting I chose to use a sigma of 10 and kernel size of 13. 
+                As can be seen below, from close up we are able to see the starry night painting dominate the picture. However, as we go further back we see the mountain landscape dominate.
+            </p>
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/mount.jpeg" alt="Orignal Mountain Landscape Image">
+                        <figcaption>Low Frequency Image</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/starry.jpeg" alt="Original Starry Night Image">
+                        <figcaption>High Frequency Image</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/hybridstarrymountain.jpg" alt="Hybrid Starry Mountain Image">
+                        <figcaption>Hybrid Image</figcaption>
+                    </figure>
+                </div>
+            </div>
+            <h3>Fourier Transforms for Starry Night + Mountain Landscape</h3>
+            <div class="gallery-container"></div>
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/fftmount.jpg" alt="Mountain Landscape FFT">
+                        <figcaption>Low Frequency FFT</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/fftstarry.jpg" alt="Starry Night FFT">
+                        <figcaption>High Frequency FFT</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/ffthybrid.jpg" alt="Hybrid Starry Mountain FFT">
+                        <figcaption>Hybrid FFT</figcaption>
+                    </figure>
+                </div>
+            </div>
+            <h3>Smily/Sad Face (Failure)</h3>
+            <p>For the Smily/Sad Face hybrid image, I chose to use a sigma of 2 and kernel size of 10 for the smily face. For the sad face I chose to use a sigma of 8 and kernel size of 13. 
+                However, in this case it seems like there is no "Hybrid" effect. The sad face and smily face both seem to appear at all distances. This might be because the smily face is natively
+                gray.
+        </p>
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/smile.png" alt="Orignal Smily Face Image">
+                        <figcaption>Low Frequency Image</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/sad.png" alt="Original Sad Face Image">
+                        <figcaption>High Frequency Image</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/hybridface.jpg" alt="Hybrid Face Image">
+                        <figcaption>Hybrid Image</figcaption>
+                    </figure>
+                </div>
+            </div>
+            
+        </section>
+    </div>
+
     
 </main>
-
 
 </body>
 </html>
