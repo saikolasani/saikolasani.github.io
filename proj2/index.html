@@ -97,27 +97,47 @@
 
     <div class="section-wrapper">
         <section id="singlescale">
-            <h2>Single Scale Alignment</h2>
-            <p>For images with lower resolutions, the easiest way to align the three-channel images is to exhaustively search over a window of possible displacements and score each using a metric. 
-                We can then take the displacement with the best score. As suggested in the project description, I used a displacement range of [-15,15] pixels.
-                I experimented with the Sum of Absolute Difference (SAD) and Normalized Cross Correlation (NCC) regarding the scoring metric. 
-                I found that SAD performed better for the single-scale alignment. However, the images were still not very well aligned. To further improve performance, 
-                I decided to crop the borders of the images by 10%. Furthermore, I also parallelized the code using a ThreadPoolExecutor and the map function, which improved the speed by a decent margin.
+            <h2>Fun with Filters</h2>
+            <h3>Finite Difference Operator</h3>
+            <p>Finite Difference Operators help detect edges by highlighting regions where pixel intensity changes rapidly, which usually corresponds to edges or boundaries in the image.
+                In two-dimensional images, the finite difference operator computes the derivative in both the horizontal (x) and vertical (y) directions. These derivatives are calculated using simple convolution filters, such as:
             </p>
-            <h3>Low Resolution Image Gallery</h3>
+            <ul>
+                <li><strong>Dx = [1, -1]</strong>: for detecting horizontal changes (vertical edges).</li>
+                <li><strong>Dy = [[1], [-1]]</strong>: for detecting vertical changes (horizontal edges).</li>
+            </ul>
+            <p>
+                When these operators are applied to an image, they produce two gradient images:
+            </p>
+            <ul>
+                <li>The gradient in the <strong>x-direction</strong> highlights vertical edges.</li>
+                <li>The gradient in the <strong>y-direction</strong> highlights horizontal edges.</li>
+            </ul>
+            <p>
+                By combining these gradients we can produce an edge-detection image that reveals significant changes in intensity.
+            </p>
+            <h3>Results</h3>
             <div class="gallery-container">
                 <div class="gallery">
-                    <figure class="gallery-item">
-                        <img src="assets/cathedral.jpg" alt="cathedral">
-                        <figcaption>R Shift: (3, 11), G Shift: (2, 5)</figcaption>
+                    <figure class="gallery-item"></figure>
+                        <img src="assets/cameraman.png" alt="Cameraman Image">
+                        <figcaption>Original Image</figcaption>
                     </figure>
                     <figure class="gallery-item">
-                        <img src="assets/monastery.jpg" alt="monastery">
-                        <figcaption>R Shift: (2, 3), G Shift: (2, -3)</figcaption>
+                        <img src="assets/PartialX.jpg" alt="XGradient">
+                        <figcaption>Dx</figcaption>
                     </figure>
                     <figure class="gallery-item">
-                        <img src="assets/tobolsk.jpg" alt="tobolsk">
-                        <figcaption>R Shift: (3, 6), G Shift: (3, 3)</figcaption>
+                        <img src="assets/PartialY.jpg" alt="YGradient">
+                        <figcaption>Dy</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/GradCombined.jpg" alt="Combined Gradients">
+                        <figcaption>Combined Gradients</figcaption>
+                    </figure>
+                    <figure class="gallery-item"></figure>
+                        <img src="assets/BinaryEdge.jpg" alt="Binarized Image">
+                        <figcaption>Binarized Image</figcaption>
                     </figure>
                 </div>
             </div>
