@@ -55,20 +55,16 @@
         .gallery {
             display: flex;
             flex-wrap: wrap;
-            gap: 20px;
+            gap: 15px;
             justify-content: center;
         }
-
         .gallery-item {
-            width: 300px;  /* Fixed width for all gallery items */
-            height: 300px; /* Fixed height for all gallery items */
+            max-width: 300px;
             text-align: center;
         }
-
         .gallery-item img {
-            width: 300px;  /* Ensure the image takes the full width of its container */
-            height: 300px; /* Ensure the image takes the full height of its container */
-            object-fit: contain;  /* Ensure the image fits without being distorted or cropped */
+            width: 100%;
+            height: auto;
             border: 1px solid #ddd;
             border-radius: 5px;
         }
@@ -159,7 +155,7 @@
             <p>There are some very noticeble differences between the two methods. The binarized edges are much thicker and more prominent than before. Furthermore, some of the uncessary details
                 details near the bottom of the pictures are removed and the fine details from the camera are also gone.
             </p>
-            <div class="gallery-container"></div>
+            <div class="gallery-container">
                 <div class="gallery">
                     <figure class="gallery-item">
                         <img src="assets/cameraman.png" alt="Cameraman Image">
@@ -188,19 +184,19 @@
             <p>An other method is to do the same thing with a single convolution instead of two by creating a derivative of gaussian filters. the Gaussian kernels used to blur the image are 
                 instead convolved beforehand using the dx and dy kernels to produce dx_gaussian and dy_gaussian. We then convolute the original image with the new filters.
             </p>
-            <div class="gallery-container"></div>
+            <div class="gallery-container">
                 <div class="gallery">
                     <figure class="gallery-item">
                         <img src="assets/cameraman.png" alt="Cameraman Image">
                         <figcaption>Original Image</figcaption>
                     </figure>
                     <figure class="gallery-item">
-                        <img src="assets/DoGX.jpg" alt="X Filter">
-                        <figcaption>Dx</figcaption>
+                        <img src="assets/DoGxzoom.png" alt="X Filter">
+                        <figcaption>X Filter</figcaption>
                     </figure>
                     <figure class="gallery-item">
-                        <img src="assets/DoGY.jpg" alt="Y Filter">
-                        <figcaption>Dy</figcaption>
+                        <img src="assets/DoGyzoom.png" alt="Y Filter">
+                        <figcaption>Y Filter</figcaption>
                     </figure>
                     <figure class="gallery-item">
                         <img src="assets/DoGGradCombined.jpg" alt="Combined Gradients">
@@ -212,6 +208,21 @@
                     </figure>
                 </div>
             </div>
+
+            <h3>Comparison</h3>
+            <div class="gallery-container"></div>
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/GausBinaryEdge.jpg" alt="Binarized Image">
+                        <figcaption>Binarized Image using Gausian Filter</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/DoGBinaryEdge.jpg" alt="Binarized Image">
+                        <figcaption>Binarized Image using DoG</figcaption>
+                    </figure>
+                </div>
+            </div>
+            <p>As can be seen the two images are identical apart from a few slight differences in length and shape of minor edges.</p>
         </section>
     </div>
 
