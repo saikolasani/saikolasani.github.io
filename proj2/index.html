@@ -68,6 +68,18 @@
             border: 1px solid #ddd;
             border-radius: 5px;
         }
+        .gallery-item2 {
+            max-width: 100px;
+            text-align: center;
+        }
+        .gallery-item2 img {
+            width: auto;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        
         figcaption {
             margin-top: 8px;
             font-size: 14px;
@@ -378,6 +390,301 @@
         </section>
     </div>
 
+    <div class="section-wrapper"></div>
+        <section id="GaussianLaplacianStacks">
+            <h2>Gaussian and Laplacian Stacks</h2>
+            <h3>Approach</h3>
+            <p> In this section we create Gaussian and Laplacian Stacks of Images. These are very similar to the pyramids, execpt instead of downsampling, the previous level is blurred using
+                a Gaussian kernel to make the next level. Furthermore, the Lapacian stack is calculated by laplacian_stack[i] = gaussian_stack[i] - gaussian_stack[i+1].
+            </p>
+            <h3>Apple</h3>
+            <h4>Gaussian Stack</h4>
+            <div class="gallery-container"></div>
+                <div class="gallery">
+                    <figure class="gallery-item2">
+                        <img src="assets/apple_gaussian_level_0.jpg" alt="apple_gaussian_level_0">
+                        <figcaption>level_0</figcaption>
+                    </figure>
+                    <figure class="gallery-item2">
+                        <img src="assets/apple_gaussian_level_1.jpg" alt="apple_gaussian_level_1">
+                        <figcaption>level_1</figcaption>
+                    </figure>
+                    <figure class="gallery-item2">
+                        <img src="assets/apple_gaussian_level_2.jpg" alt="apple_gaussian_level_2">
+                        <figcaption>level_2</figcaption>
+                    </figure>
+                    <figure class="gallery-item2">
+                        <img src="assets/apple_gaussian_level_3.jpg" alt="apple_gaussian_level_3">
+                        <figcaption>level_3</figcaption>
+                    </figure>
+                    <figure class="gallery-item2">
+                        <img src="assets/apple_gaussian_level_4.jpg" alt="apple_gaussian_level_4">
+                        <figcaption>level_4</figcaption>
+                    </figure>
+                    <figure class="gallery-item2">
+                        <img src="assets/apple_gaussian_level_5.jpg" alt="apple_gaussian_level_5">
+                        <figcaption>level_5</figcaption>
+                    </figure>
+                </div>
+            </div>
+
+            <h4>Laplacian Stack</h4>
+            <div class="gallery-container"></div>
+                <div class="gallery">
+                    <figure class="gallery-item2">
+                        <img src="assets/apple_laplacian_level_0.jpg" alt="apple_laplacian_level_0">
+                        <figcaption>level_0</figcaption>
+                    </figure>
+                    <figure class="gallery-item2">
+                        <img src="assets/apple_laplacian_level_1.jpg" alt="apple_laplacian_level_1">
+                        <figcaption>level_1</figcaption>
+                    </figure>
+                    <figure class="gallery-item2">
+                        <img src="assets/apple_laplacian_level_2.jpg" alt="apple_laplacian_level_2">
+                        <figcaption>level_2</figcaption>
+                    </figure>
+                    <figure class="gallery-item2">
+                        <img src="assets/apple_laplacian_level_3.jpg" alt="apple_laplacian_level_3">
+                        <figcaption>level_3</figcaption>
+                    </figure>
+                    <figure class="gallery-item2">
+                        <img src="assets/apple_laplacian_level_4.jpg" alt="apple_laplacian_level_4">
+                        <figcaption>level_4</figcaption>
+                    </figure>
+                    <figure class="gallery-item2">
+                        <img src="assets/apple_laplacian_level_5.jpg" alt="apple_laplacian_level_5">
+                        <figcaption>level_5</figcaption>
+                    </figure>
+                </div>
+            </div>
+                
+            <h3>Orange</h3>
+            <h4>Gaussian Stack</h4>
+            <div class="gallery-container"></div>
+                <div class="gallery">
+                    <figure class="gallery-item2">
+                        <img src="assets/orange_gaussian_level_0.jpg" alt="orange_gaussian_level_0">
+                        <figcaption>level_0</figcaption>
+                    </figure>
+                    <figure class="gallery-item2">
+                        <img src="assets/orange_gaussian_level_1.jpg" alt="orange_gaussian_level_1">
+                        <figcaption>level_1</figcaption>
+                    </figure>
+                    <figure class="gallery-item2">
+                        <img src="assets/orange_gaussian_level_2.jpg" alt="orange_gaussian_level_2">
+                        <figcaption>level_2</figcaption>
+                    </figure>
+                    <figure class="gallery-item2">
+                        <img src="assets/orange_gaussian_level_3.jpg" alt="orange_gaussian_level_3">
+                        <figcaption>level_3</figcaption>
+                    </figure>
+                    <figure class="gallery-item2">
+                        <img src="assets/orange_gaussian_level_4.jpg" alt="orange_gaussian_level_4">
+                        <figcaption>level_4</figcaption>
+                    </figure>
+                    <figure class="gallery-item2">
+                        <img src="assets/orange_gaussian_level_5.jpg" alt="orange_gaussian_level_5">
+                        <figcaption>level_5</figcaption>
+                    </figure>
+                </div>
+            </div>
+
+            <h4>Laplacian Stack</h4>
+            <div class="gallery-container"></div>
+                <div class="gallery">
+                    <figure class="gallery-item2">
+                        <img src="assets/orange_laplacian_level_0.jpg" alt="orange_laplacian_level_0">
+                        <figcaption>level_0</figcaption>
+                    </figure>
+                    <figure class="gallery-item2">
+                        <img src="assets/orange_laplacian_level_1.jpg" alt="orange_laplacian_level_1">
+                        <figcaption>level_1</figcaption>
+                    </figure>
+                    <figure class="gallery-item2">
+                        <img src="assets/orange_laplacian_level_2.jpg" alt="orange_laplacian_level_2">
+                        <figcaption>level_2</figcaption>
+                    </figure>
+                    <figure class="gallery-item2">
+                        <img src="assets/orange_laplacian_level_3.jpg" alt="orange_laplacian_level_3">
+                        <figcaption>level_3</figcaption>
+                    </figure>
+                    <figure class="gallery-item2">
+                        <img src="assets/orange_laplacian_level_4.jpg" alt="orange_laplacian_level_4">
+                        <figcaption>level_4</figcaption>
+                    </figure>
+                    <figure class="gallery-item2">
+                        <img src="assets/orange_laplacian_level_5.jpg" alt="orange_laplacian_level_5">
+                        <figcaption>level_5</figcaption>
+                    </figure>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="section-wrapper"></div>
+        <section id="MultiresolutionBlending">
+            <h2>Multiresolution Blending</h2>
+            <h3>Approach</h3>
+            <p> We can blend two images together using the gaussian and lapacian stacks from above. The input images left and right are used to generate Laplacian stacks left_l_stack and right_l_stack using the method above. 
+                A Gaussian stack mask_g_stack is generated from the mask input image. 
+                To blend the images, for each level i in all three stacks, blended_laplacian_stack[i] = mask_gaussian_stack[i] * left_laplacian_stack[i] + (1 - mask_gaussian_stack[i]) * right_laplacian_stack[i].
+            </p>
+
+            <h3>Oraple</h3>
+            <div class="gallery-container"></div>
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/apple.jpeg" alt="apple">
+                        <figcaption>Apple</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/orange.jpeg" alt="orange">
+                        <figcaption>Orange</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/halfmask.jpg" alt="halfmask">
+                        <figcaption>Mask</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/orple.jpg" alt="orple">
+                        <figcaption>Oraple</figcaption>
+                    </figure>
+                </div>
+            </div>
+            
+            <h3>Tomaya (Tom Cruise + Zendaya)</h3>
+            <div class="gallery-container"></div>
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/tom.jpeg" alt="Tom Cruise">
+                        <figcaption>Tom Cruise</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/zendaya.jpeg" alt="Zendaya">
+                        <figcaption>Zendaya</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/halfmask.jpg" alt="halfmask">
+                        <figcaption>Mask</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/tomaya.jpg" alt="Tomaya">
+                        <figcaption>Tomaya</figcaption>
+                    </figure>
+                </div>
+            </div>
+
+            <h3>Red Forest Through a Window</h3>
+            <div class="gallery-container"></div>
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/redforest.jpeg" alt="Red Forest">
+                        <figcaption>Red Forest</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/window.jpg" alt="Window">
+                        <figcaption>Window</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/windowmask.jpg" alt="mask">
+                        <figcaption>Mask</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/redwindow.jpg" alt="Red Forest through Window">
+                        <figcaption>Red Forest through Window</figcaption>
+                    </figure>
+                </div>
+            </div>
+
+            <h4>Laplacians of the 3</h4>
+            <div class="gallery-container"></div>
+                <div class="gallery">
+                    <figure class="gallery-item2">
+                        <img src="assets/forest_laplacian_level_0.jpg" alt="forest_laplacian_level_0">
+                        <figcaption>level_0</figcaption>
+                    </figure>
+                    <figure class="gallery-item2">
+                        <img src="assets/forest_laplacian_level_1.jpg" alt="forest_laplacian_level_1">
+                        <figcaption>level_1</figcaption>
+                    </figure>
+                    <figure class="gallery-item2">
+                        <img src="assets/forest_laplacian_level_2.jpg" alt="forest_laplacian_level_2">
+                        <figcaption>level_2</figcaption>
+                    </figure>
+                    <figure class="gallery-item2">
+                        <img src="assets/forest_laplacian_level_3.jpg" alt="forest_laplacian_level_3">
+                        <figcaption>level_3</figcaption>
+                    </figure>
+                    <figure class="gallery-item2">
+                        <img src="assets/forest_laplacian_level_4.jpg" alt="forest_laplacian_level_4">
+                        <figcaption>level_4</figcaption>
+                    </figure>
+                    <figure class="gallery-item2">
+                        <img src="assets/redforest.jpeg" alt="forest_laplacian_level_5">
+                        <figcaption>level_5</figcaption>
+                    </figure>
+                </div>
+            </div>
+
+            <div class="gallery-container"></div>
+                <div class="gallery">
+                    <figure class="gallery-item2">
+                        <img src="assets/window_laplacian_level_0.jpg" alt="window_laplacian_level_0">
+                        <figcaption>level_0</figcaption>
+                    </figure>
+                    <figure class="gallery-item2">
+                        <img src="assets/window_laplacian_level_1.jpg" alt="window_laplacian_level_1">
+                        <figcaption>level_1</figcaption>
+                    </figure>
+                    <figure class="gallery-item2">
+                        <img src="assets/window_laplacian_level_2.jpg" alt="window_laplacian_level_2">
+                        <figcaption>level_2</figcaption>
+                    </figure>
+                    <figure class="gallery-item2">
+                        <img src="assets/window_laplacian_level_3.jpg" alt="window_laplacian_level_3">
+                        <figcaption>level_3</figcaption>
+                    </figure>
+                    <figure class="gallery-item2">
+                        <img src="assets/window_laplacian_level_4.jpg" alt="window_laplacian_level_4">
+                        <figcaption>level_4</figcaption>
+                    </figure>
+                    <figure class="gallery-item2">
+                        <img src="assets/window.jpg" alt="window_laplacian_level_5">
+                        <figcaption>level_5</figcaption>
+                    </figure>
+                </div>
+            </div>
+
+            <div class="gallery-container"></div>
+                <div class="gallery">
+                    <figure class="gallery-item2">
+                        <img src="assets/redwindow_laplacian_level_0.jpg" alt="redwindow_laplacian_level_0">
+                        <figcaption>level_0</figcaption>
+                    </figure>
+                    <figure class="gallery-item2">
+                        <img src="assets/redwindow_laplacian_level_1.jpg" alt="redwindow_laplacian_level_1">
+                        <figcaption>level_1</figcaption>
+                    </figure>
+                    <figure class="gallery-item2">
+                        <img src="assets/redwindow_laplacian_level_2.jpg" alt="redwindow_laplacian_level_2">
+                        <figcaption>level_2</figcaption>
+                    </figure>
+                    <figure class="gallery-item2">
+                        <img src="assets/redwindow_laplacian_level_3.jpg" alt="redwindow_laplacian_level_3">
+                        <figcaption>level_3</figcaption>
+                    </figure>
+                    <figure class="gallery-item2">
+                        <img src="assets/redwindow_laplacian_level_4.jpg" alt="redwindow_laplacian_level_4">
+                        <figcaption>level_4</figcaption>
+                    </figure>
+                    <figure class="gallery-item2">
+                        <img src="assets/redwindow.jpg" alt="redwindow_laplacian_level_5">
+                        <figcaption>level_5</figcaption>
+                    </figure>
+                </div>
+            </div>
+        </section>
+    </div>
     
 </main>
 
