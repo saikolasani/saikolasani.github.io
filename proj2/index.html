@@ -100,10 +100,10 @@
     <div class="section-wrapper">
         <section id="introduction">
             <h2>Introduction</h2>
-            <p>In this project we explore diffeent ways of using frequencies to process and combine images in interesting ways. 
-                For example, similar to what our phones do, we can sharpen images by emphasizing high frequencies. We can also extract edges using finite difference operators.
-                Hybrid images which look one way close up and another far away can also be created by combined high frequencies of one image with the low frequencies of an other.
-                Lastly, images can be blended togerther at verious frequencies with the help of gaussian and laplacian stacks.
+            <p>In this project, we explore different ways of using frequencies to process and combine images interestingly. 
+                For example, similar to our phones, we can sharpen images by emphasizing high frequencies. We can also extract edges using finite difference operators.
+                Hybrid images that look one way close up and another far away can also be created by combining the high frequencies of one image with the low frequencies of another.
+                Lastly, images can be blended at various frequencies with the help of Gaussian and Laplacian stacks.
             </p>
         </section>
     </div>
@@ -113,7 +113,7 @@
             <h2>Fun with Filters</h2>
             <h3>Finite Difference Operator</h3>
             <p>Finite Difference Operators help detect edges by highlighting regions where pixel intensity changes rapidly, which usually corresponds to edges or boundaries in the image.
-                In two-dimensional images, the finite difference operator computes the derivative in both the horizontal (x) and vertical (y) directions. These derivatives are calculated using simple convolution filters, such as:
+                In two-dimensional images, the finite difference operator computes the derivative in horizontal (x) and vertical (y) directions. These derivatives are calculated using simple convolution filters, such as:
             </p>
             <ul>
                 <li><strong>Dx = [1, -1]</strong>: for detecting horizontal changes (vertical edges).</li>
@@ -127,7 +127,7 @@
                 <li>The gradient in the <strong>y-direction</strong> highlights horizontal edges.</li>
             </ul>
             <p>
-                By combining these gradients we can produce an edge-detection image that reveals significant changes in intensity.
+                By combining these gradients, we can produce an edge-detection image that reveals significant changes in intensity.
             </p>
             <h3>Results</h3>
             <div class="gallery-container">
@@ -161,12 +161,12 @@
         <section id="DoG">
             <h2>Derivative of Gaussian (DoG) Filter</h2>
             <h3>Blurred Finite Difference</h3>
-            <p>A Gaussian filter is applied to the image to reduce noise and small details. I chose to use a kernel of size 5 with sigma = 1 created using cv2.getGaussianKernel.
-                I Created a blurred version of the original image by convolving with the gaussian and repeating the procedure in the previous part.
+            <p>A Gaussian filter is applied to the image to reduce noise and small details. I used a kernel of size 5 with sigma = 1 created using cv2.getGaussianKernel.
+                I created a blurred version of the original image by convolving with the Gaussian and repeating the procedure in the previous part.
             </p>
 
-            <p>There are some very noticeble differences between the two methods. The binarized edges are much thicker and more prominent than before. Furthermore, some of the uncessary details
-                details near the bottom of the pictures are removed and the fine details from the camera are also gone.
+            <p>There are some very noticeable differences between the two methods. The binarized edges are much thicker and more prominent than before. Furthermore, some of the unnecessary details
+                Details near the bottom of the pictures have been removed, and the fine details from the camera have also been removed.
             </p>
             <div class="gallery-container">
                 <div class="gallery">
@@ -194,7 +194,7 @@
             </div>
             
             <h3>Derivative of Gaussian (DoG)</h3>
-            <p>An other method is to do the same thing with a single convolution instead of two by creating a derivative of gaussian filters. the Gaussian kernels used to blur the image are 
+            <p> Another method is to do the same thing with a single convolution instead of two by creating a derivative of Gaussian filters. the Gaussian kernels used to blur the image are 
                 instead convolved beforehand using the dx and dy kernels to produce dx_gaussian and dy_gaussian. We then convolute the original image with the new filters.
             </p>
             <div class="gallery-container">
@@ -227,7 +227,7 @@
                 <div class="gallery">
                     <figure class="gallery-item">
                         <img src="assets/GausBinaryEdge.jpg" alt="Binarized Image">
-                        <figcaption>Binarized Image using Gausian Filter</figcaption>
+                        <figcaption>Binarized Image using Gaussian Filter</figcaption>
                     </figure>
                     <figure class="gallery-item">
                         <img src="assets/DoGBinaryEdge.jpg" alt="Binarized Image">
@@ -235,7 +235,7 @@
                     </figure>
                 </div>
             </div>
-            <p>As can be seen the two images are identical apart from a few slight differences in length and shape of minor edges.</p>
+            <p>As can be seen, the two images are identical, apart from a few slight differences in length and shape of minor edges.</p>
         </section>
     </div>
 
@@ -244,11 +244,11 @@
             <h2>Image "Sharpening"</h2>
             <h3>Unsharp Masking Technique</h3>
             <p> We can sharpen images by adding more high frequencies to the image. We do this using the unsharp masking technique. We first use a low pass filter (Gaussian) 
-                to retain only the low frequencies. Then we subtract the low frequences from the original image to get only the high frequencies. These details are then emphasized in the final image through 
+                to retain only the low frequencies. Then, we subtract the low frequencies from the original image to get only the high frequencies. These details are then emphasized in the final image through 
                 result = target + alpha * details where alpha is a sharpening factor.
             </p>
             <h3>Taj Mahal</h3>
-            <p>For the Taj Mahal image, I chose to use a sharpening factor of 2.0. As can be seen below, the edges of the build as well as the structures of the trees were emphasized.</p>
+            <p>For the Taj Mahal image, I used a sharpening factor of 2.0. As seen below, the edges of the building and the structures of the trees were emphasized.</p>
             <div class="gallery-container">
                 <div class="gallery">
                     <figure class="gallery-item">
@@ -262,8 +262,8 @@
                 </div>
             </div>
             <h3>Bee + Flower</h3>
-            <p>For the Bee on Flower image, I chose to use a sharpening factor of 5.0. As can be seen below, the edges of the flower as well as the outline of the bee were emphasized.
-                The sharpened image is much more clear than the orignal image.
+            <p>For the Bee on Flower image, I used a sharpening factor of 5.0. As can be seen below, the edges of the flower, as well as the outline of the bee, were emphasized.
+                The sharpened image is much more clear than the original image.
             </p>
             <div class="gallery-container">
                 <div class="gallery">
@@ -278,7 +278,7 @@
                 </div>
             </div>
             <h3>Resharpening a Blurred Image</h3>
-            <p>For this examole, I took a sharp image of a cat, then I blurred it, and then sharpened it again. As can be seen, the resharpened image looks sharper than the orgininal image on the 
+            <p>For this example, I took a sharp image of a cat, blurred it, and then sharpened it again. As can be seen, the resharpened image looks sharper than the original image on the 
                 edges such as whiskers and eyes. But we still lose some detail in the fur of the cat.</p>
             <div class="gallery-container">
                 <div class="gallery">
@@ -304,15 +304,15 @@
         <section id="hybrid">
             <h2>Hybrid Images</h2>
             <h3>Approach</h3>
-            <p> The goal of this part of the assignment is to create hybrid images. Hybrid images change in interpretation based on the viewing distance. 
-                This is based on the idea that high frequency tends to dominate when viewing distance is closer, but, at a distance, only the low frequency part of the signal can be seen. 
-                By blending the high frequency portion of one image with the low-frequency portion of another, you get a hybrid image that leads to different interpretations at different distances.
-                For a low-pass filter, I used a standard 2D Gaussian filter. For a high-pass filter, I used the original image minus the low frequencies. Since both images are different, they require 
-                the use of different kernel sizes and sigmas for the Gaussians. 
+            <p> This part of the assignment aims to create hybrid images. Hybrid images change in interpretation based on the viewing distance. 
+                This is based on the idea that high frequency tends to dominate when the viewing distance is closer, but at a distance, only the low-frequency part of the signal can be seen. 
+                Blending the high-frequency portion of one image with the low-frequency portion of another gives you a hybrid image that leads to different interpretations at different distances.
+                For a low-pass filter, I used a standard 2D Gaussian filter. I used the original image minus the low frequencies for a high-pass filter. Since both images are different, they require 
+                different kernel sizes and sigmas for the Gaussians. 
             </p>
             <h3>Derek + Cat</h3>
-            <p>For the Dererk Cat hybrid image, I chose to use a sigma of 5 and kernel size of 10 for Derek. For the cat I chose to use a sigma of 15 and kernel size of 13. 
-                As can be seen below, from close up we are able to see the features of the cat dominate the picture. However, as we go further back we are only able to see Derek properly.</p>
+            <p>For the Dererk Cat hybrid image, I used a sigma of 5 and a kernel size of 10 for Derek. I used a sigma of 15 for the cat and a kernel size 13. 
+                From a close-up, we can see that the cat's features dominate the picture. However, as we go back, we can only see Derek properly.</p>
             <div class="gallery-container">
                 <div class="gallery">
                     <figure class="gallery-item">
@@ -331,7 +331,7 @@
             </div>
             <h3>Starry Night + Mountain Landscape (My Favorite)</h3>
             <p>For the Starry Night Mountain hybrid image, I chose to use a sigma of 2 and kernel size of 10 for the Mountain Landscape. For the Starry Night painting I chose to use a sigma of 10 and kernel size of 13. 
-                As can be seen below, from close up we are able to see the starry night painting dominate the picture. However, as we go further back we see the mountain landscape dominate.
+                As can be seen below, from close up we can see the starry night painting dominate the picture. However, as we go further back we see the mountain landscape dominate.
             </p>
             <div class="gallery-container">
                 <div class="gallery">
@@ -395,8 +395,8 @@
         <section id="GaussianLaplacianStacks">
             <h2>Gaussian and Laplacian Stacks</h2>
             <h3>Approach</h3>
-            <p> In this section we create Gaussian and Laplacian Stacks of Images. These are very similar to the pyramids, execpt instead of downsampling, the previous level is blurred using
-                a Gaussian kernel to make the next level. Furthermore, the Lapacian stack is calculated by laplacian_stack[i] = gaussian_stack[i] - gaussian_stack[i+1].
+            <p> In this section, we create Gaussian and Laplacian Stacks of Images. These are very similar to the pyramids, except instead of downsampling, the previous level is blurred using
+                a Gaussian kernel to make the next level. Furthermore, the Laplacian stack is calculated by laplacian_stack[i] = gaussian_stack[i] - gaussian_stack[i+1].
             </p>
             <h3>Apple</h3>
             <h4>Gaussian Stack</h4>
@@ -526,7 +526,7 @@
         <section id="MultiresolutionBlending">
             <h2>Multiresolution Blending</h2>
             <h3>Approach</h3>
-            <p> We can blend two images together using the gaussian and lapacian stacks from above. The input images left and right are used to generate Laplacian stacks left_l_stack and right_l_stack using the method above. 
+            <p> We can blend two images using the Gaussian and Lapacian stacks from above. The input images left and right are used to generate Laplacian stacks left_l_stack and right_l_stack using the method above. 
                 A Gaussian stack mask_g_stack is generated from the mask input image. 
                 To blend the images, for each level i in all three stacks, blended_laplacian_stack[i] = mask_gaussian_stack[i] * left_laplacian_stack[i] + (1 - mask_gaussian_stack[i]) * right_laplacian_stack[i].
             </p>
