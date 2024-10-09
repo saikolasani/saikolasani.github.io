@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fun with Filters and Frequencies</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        header {
+            background-color: #000000;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+        }
+        section {
+            padding: 2rem;
+            margin: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        h2 {
+            color: #000000;
+        }
+        .container {
+            display: block; 
+        }
+        .section-wrapper {
+            width: 100%; 
+            padding: 10px;
+        }
+        .image-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .image-container img {
+            width: auto; /* Adjusts the width of the images */
+            height: auto;
+        }
+        .text-box {
+            width: 100px; /* Width of the text box */
+            margin-left: 10px; /* Spacing between the image and the text box */
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .gallery-container {
+            margin: 20px;
+        }
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+        .gallery-item {
+            max-width: 300px;
+            text-align: center;
+        }
+        .gallery-item img {
+            width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .gallery-item2 {
+            max-width: 100px;
+            text-align: center;
+        }
+        .gallery-item2 img {
+            width: auto;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        
+        figcaption {
+            margin-top: 8px;
+            font-size: 14px;
+            color: #555;
+        }
+        
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Programming Project #2: Fun with Filters and Frequencies!</h1>
+    <h1>By Sai Kolasani</h1>
+</header>
+
+<main class="container">
+    <div class="section-wrapper">
+        <section id="introduction">
+            <h2>Introduction</h2>
+            <p>In this project I produce a "morph" animation of your face into someone else's face, compute the mean of a population of faces and extrapolate from a population mean to create a caricature of myself and more.
+            </p>
+        </section>
+    </div>
+
+    <div class="section-wrapper">
+        <section id="correspondences">
+            <h1>Part 1. Defining Correspondences</h1>
+            <p>First, I cropped and rescaled an image of myself and an image of Tom Cruise to have the same dimensions, and so that our faces have a similar size and aspect ratio.
+                I then used the online tool provided by the spec to select 24 correspondence points for each of the two images (including the 4 corners). 
+                Finally, I generated a Delaunay triangulation at the midway points of the two sets of correspondence points.
+            </p>
+            
+            <h3>Results</h3>
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/sai_resized_tom.jpg" alt="Sai Image">
+                        <figcaption>Sai's Headshot</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/tom.jpg" alt="Tom Image">
+                        <figcaption>Tom's Headshot</figcaption>
+                    </figure>
+                </div>
+            </div>
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/delaunay_sai.jpg" alt="delaunay_sai Image">
+                        <figcaption>Delaunay Triangles for Sai's Correspondences</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/delaunay_sai.jpg" alt="delaunay_tom Image">
+                        <figcaption>Delaunay Triangles for Toms's Correspondences</figcaption>
+                    </figure>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="section-wrapper">
+        <section id="DoG">
+            <h1>Part 2. Computing the "Mid-way Face"</h1>
+
+            <p>In this section, we compute the "mid-way face" by averaging the geometry and appearance of two input images. The steps to achieve this are outlined below:</p>
+
+            <h3>Methodology Overview</h3>
+
+            <ol>
+                <li>
+                    <strong>Compute Average Shape:</strong>
+                    <p>The average shape is computed by taking the midpoint of each corresponding keypoint between the two faces. This creates a set of <em>midway keypoints</em>, representing the geometric average of both faces.</p>
+                </li>
+
+                <li>
+                    <strong>Delaunay Triangulation:</strong>
+                    <p>Next, we apply a <code>Delaunay triangulation</code> to the midway keypoints. This divides the face into triangles, which are used for affine transformations of both input faces.</p>
+                </li>
+
+                <li>
+                    <strong>Affine Transformation Calculation:</strong>
+                    <p>For each triangle from both original faces, an affine transformation matrix is computed using the <code>computeAffine()</code> function. This matrix maps the triangles from their original positions to the corresponding triangle in the average face.</p>
+                </li>
+
+                <li>
+                    <strong>Warping Faces into the Average Shape:</strong>
+                    <p>Each face is warped into the average shape by applying the affine transformation for each triangle. A polygon mask is generated using <code>polygon()</code> to isolate the pixels in each triangle, and the transformation is applied to warp the original image pixels to the average shape.</p>
+                </li>
+
+                <li>
+                    <strong>Combine Warped Faces:</strong>
+                    <p>Once both faces have been warped into the average geometry, we compute the final "mid-way face" by averaging the pixel values of the two warped images. This gives us a face that has the average geometry and a blend of the colors from both input images.</p>
+                </li>
+            </ol>
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/sai_resized_tom.jpg" alt="Sai Image">
+                        <figcaption>Sai's Headshot</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/tom.jpg" alt="Tom Image">
+                        <figcaption>Tom's Headshot</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/sai_tom_morphed copy.jpg" alt="Sai Image">
+                        <figcaption>Sai + Tom Midway Headshot</figcaption>
+                    </figure>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="section-wrapper">
+        <section id="morphvideo">
+            <h1>Part 3. The Morph Sequence</h1>
+            
+            <p>In this part, we create a morph sequence between two images (A and B) using the keypoints and the Delaunay triangulation structure from Part 2. The morph sequence smoothly transitions between the two images by gradually warping and cross-dissolving them over multiple frames.</p>
+
+            <h3>Methodology Overview</h1>
+
+            <ol>
+                <li>
+                    <strong>Warp and Dissolve:</strong>
+                    <p>We use the keypoints from both images to interpolate between them. The warping is controlled by <code>warp_frac</code>, which transitions the shape between the two images, while <code>dissolve_frac</code> controls the blending of the colors from both images.</p>
+                </li>
+
+                <li>
+                    <strong>Morph Function:</strong>
+                    <p>The <code>morph()</code> function takes two images, their keypoints, and the Delaunay triangulation to warp each face into an intermediate shape. For each frame, <code>warp_frac</code> and <code>dissolve_frac</code> are adjusted to gradually transition between the original and final images.</p>
+                </li>
+
+                <li>
+                    <strong>Create Sequence</strong>
+                    <p>The morph sequence is generated by creating multiple frames, each corresponding to a different value of <code>warp_fraction</code> and <code>dissolve_fraction</code> in the range [0,1].</p>
+                </li>
+            </ol>
+            
+            <div class="gallery">
+                <figure class="gallery-item">
+                    <img src="assets/morph.gif" alt="Gif of the Morph">
+                    <figcaption>Sai to Tom Morph</figcaption>
+                </figure>
+            </div>
+        </section>
+    </div>
+
+    <div class="section-wrapper"></div>
+        <section id="popmean">
+            <h1>Part 4. The "Mean face" of a population</h1>
+            <p>In this part, we compute the average face shape from a population dataset and morph each face into this average shape. We then display the final mean face and provide comparisons between your face and the average geometry.</p>
+
+            <h3>Methodology Overview</h3>
+
+            <ol>
+                <li>
+                    <strong>Compute the Average Shape:</strong>
+                    <p>We first compute the average shape by taking the mean of the keypoints for each face in the dataset. This results in a set of average keypoints representing the mean geometry of the population.</p>
+                </li>
+
+                <li>
+                    <strong>Morph Each Face into the Average Shape:</strong>
+                    <p>For each face in the dataset, we use Delaunay triangulation on the average keypoints and morph the face to match the average shape. This is done by warping the facial features using an affine transformation for each triangle.</p>
+                </li>
+
+                <li>
+                    <strong>Compute the Mean Face:</strong>
+                    <p>We compute the mean face by averaging all the morphed faces. The resulting mean face image shows the average facial geometry and texture of the population.</p>
+                </li>
+            </ol>
+
+            <p>Below are 3 example faces of people in the population and the population mean face.</p>
+
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/1a.jpg" alt="Man 1">
+                        <figcaption>Man 1</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/3a.jpg" alt="Man 2">
+                        <figcaption>Man 2</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/72a.jpg" alt="Women in Population">
+                        <figcaption>Woman 1</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/mean_face.jpg" alt="Mean Face">
+                        <figcaption>Population Mean Face</figcaption>
+                    </figure>
+                </div>
+            </div>
+            
+            <h3>Face Morphs</h3>
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/sai_warped_to_average.jpg" alt="Man 1">
+                        <figcaption>Sai's face morphed to average geometry</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/average_warped_to_sai.jpg" alt="Man 1">
+                        <figcaption>Average face morphed to Sai's geometry</figcaption>
+                    </figure>
+                </div>
+            </div>
+            
+        </section>
+    </div>
+
+    <div class="section-wrapper"></div>
+        <section id="caricature">
+            <h1>Part 5. Caricatures: Extrapolating from the mean</h1>
+            <p>In this part, we produce a caricature of my face by exaggerating the differences between my face and the population mean. We compute an extrapolated version of my keypoints and morph the original face into this exaggerated geometry.</p>
+
+            <h2>Methodology Overview</h2>
+
+            <ol>
+                <li>
+                    <strong>Extrapolate from the Mean:</strong>
+                    <p>We compute the exaggerated keypoints by extrapolating the differences between my face's keypoints and the mean face's keypoints. This is done using a scaling factor, <code>alpha</code>, which determines how much to exaggerate the features. A value of <code>alpha = 1.4</code> is used in this example.</p>
+                </li>
+
+                <li>
+                    <strong>Perform Delaunay Triangulation:</strong>
+                    <p>We apply a Delaunay triangulation on the new, exaggerated keypoints to divide the face into triangles. This allows us to warp the face to match the new caricature geometry.</p>
+                </li>
+
+                <li>
+                    <strong>Morph the Face into the Caricature Geometry:</strong>
+                    <p>Using the affine transformation for each triangle, we morph the original face into the exaggerated keypoints. The result is an exaggerated version of my face, or a caricature.</p>
+                </li>
+            </ol>
+
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/caricature_image.jpg" alt="Man 1">
+                        <figcaption>Caricature of Sai's Face (Alpha = 1.4)</figcaption>
+                    </figure>
+                </div>
+            </div>
+
+            <h3>Notes</h3>
+            <p>Notice how when my face was warped to match the average geometry, it was widened, but the caritcature had the opposite effect where my face became much more narrow. Particularly shrinking my face to a smaller size and expanding the corner triangles.</p>
+
+        </section>
+    </div>
+
+    <div class="section-wrapper"></div>
+        <section id="bells">
+            <h1>Bells and Whistles: Attempting to convert myself to a woman</h1>
+            <p>In this part, we attempt to change the gender of the headshot of my self to appear feminine and with blue eyes. As can be seen by the results below, I think I look much more feminine in the blended image.</p>
+
+            
+
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/sai_resized_tom.jpg" alt="Sai Image">
+                        <figcaption>Sai's Headshot</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/Average_Blonde_Female.jpg" alt="Tom Image">
+                        <figcaption>Blonde Woman</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/sai_woman.jpg" alt="Man 1">
+                        <figcaption>Sai warped into a woman</figcaption>
+                    </figure>
+                </div>
+            </div>
+
+        </section>
+    </div>
+    
+</main>
+
+</body>
+</html>
