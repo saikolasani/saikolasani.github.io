@@ -145,7 +145,7 @@
         <section id="DoG">
             <h1>Part 2. Computing the "Mid-way Face"</h1>
 
-            <p>In this section, we compute the "mid-way face" by averaging the geometry and appearance of two input images. The steps to achieve this are outlined below:</p>
+            <p>In this section, I compute the "mid-way face" by averaging the geometry and appearance of two input images. The steps to achieve this are outlined below:</p>
 
             <h3>Methodology Overview</h3>
 
@@ -157,7 +157,7 @@
 
                 <li>
                     <strong>Delaunay Triangulation:</strong>
-                    <p>Next, we apply a <code>Delaunay triangulation</code> to the midway keypoints. This divides the face into triangles, used for affine transformations of both input faces.</p>
+                    <p>Next, I apply a <code>Delaunay triangulation</code> to the midway keypoints. This divides the face into triangles, used for affine transformations of both input faces.</p>
                 </li>
 
                 <li>
@@ -172,7 +172,7 @@
 
                 <li>
                     <strong>Combine Warped Faces:</strong>
-                    <p>Once both faces have been warped into the average geometry, we compute the final "mid-way face" by averaging the pixel values of the two warped images. This gives us a face with the average geometry and a blend of the colors from both input images.</p>
+                    <p>Once both faces have been warped into the average geometry, I compute the final "mid-way face" by averaging the pixel values of the two warped images. This gives us a face with the average geometry and a blend of the colors from both input images.</p>
                 </li>
             </ol>
             <div class="gallery-container">
@@ -198,14 +198,14 @@
         <section id="morphvideo">
             <h1>Part 3. The Morph Sequence</h1>
             
-            <p>In this part, we create a morph sequence between two images (A and B) using the key points and the Delaunay triangulation structure from Part 2. The morph sequence smoothly transitions between the two images by gradually warping and cross-dissolving them over multiple frames.</p>
+            <p>In this part, I create a morph sequence between two images (A and B) using the key points and the Delaunay triangulation structure from Part 2. The morph sequence smoothly transitions between the two images by gradually warping and cross-dissolving them over multiple frames.</p>
 
             <h3>Methodology Overview</h1>
 
             <ol>
                 <li>
                     <strong>Warp and Dissolve:</strong>
-                    <p>We use the key points from both images to interpolate between them. The warping is controlled by <code>warp_frac</code>, which transitions the shape between the two images, while <code>dissolve_frac</code> controls the blending of the colors from both images.</p>
+                    <p>I use the key points from both images to interpolate between them. The warping is controlled by <code>warp_frac</code>, which transitions the shape between the two images, while <code>dissolve_frac</code> controls the blending of the colors from both images.</p>
                 </li>
 
                 <li>
@@ -231,24 +231,24 @@
     <div class="section-wrapper"></div>
         <section id="popmean">
             <h1>Part 4. The "Mean face" of a population</h1>
-            <p>In this part, we compute the average face shape from a population dataset and morph each face into this average shape. We then display the final mean face and provide comparisons between your face and the average geometry.</p>
+            <p>In this part, I compute the average face shape from a population dataset and morph each face into this average shape. I then display the final mean face and provide comparisons between your face and the average geometry.</p>
 
             <h3>Methodology Overview</h3>
 
             <ol>
                 <li>
                     <strong>Compute the Average Shape:</strong>
-                    <p>We first compute the average shape by taking the mean of the key points for each face in the dataset. This results in a set of average key points representing the mean geometry of the population.</p>
+                    <p>I first compute the average shape by taking the mean of the key points for each face in the dataset. This results in a set of average key points representing the mean geometry of the population.</p>
                 </li>
 
                 <li>
                     <strong>Morph Each Face into the Average Shape:</strong>
-                    <p>For each face in the dataset, we use Delaunay triangulation on the average key points and morph the face to match the average shape. This is done by warping the facial features using an affine transformation for each triangle.</p>
+                    <p>For each face in the dataset, I use Delaunay triangulation on the average key points and morph the face to match the average shape. This is done by warping the facial features using an affine transformation for each triangle.</p>
                 </li>
 
                 <li>
                     <strong>Compute the Mean Face:</strong>
-                    <p>We compute the mean face by averaging all the morphed faces. The resulting mean face image shows the population's average facial geometry and texture.</p>
+                    <p>I compute the mean face by averaging all the morphed faces. The resulting mean face image shows the population's average facial geometry and texture.</p>
                 </li>
             </ol>
 
@@ -295,24 +295,24 @@
     <div class="section-wrapper"></div>
         <section id="caricature">
             <h1>Part 5. Caricatures: Extrapolating from the mean</h1>
-            <p>In this part, we produce a caricature of my face by exaggerating the differences between my face and the population mean. We compute an extrapolated version of my key points and morph the original face into this exaggerated geometry.</p>
+            <p>In this part, I produce a caricature of my face by exaggerating the differences between my face and the population mean. I compute an extrapolated version of my key points and morph the original face into this exaggerated geometry.</p>
 
             <h3>Methodology Overview</h3>
 
             <ol>
                 <li>
                     <strong>Extrapolate from the Mean:</strong>
-                    <p>We compute the exaggerated key points by extrapolating the differences between my face's and the mean face's key points. This is done using a scaling factor, <code>alpha</code>, which determines how much to exaggerate the features. A value of <code>alpha = 1.4</code> is used in this example.</p>
+                    <p>I compute the exaggerated key points by extrapolating the differences between my face's and the mean face's key points. This is done using a scaling factor, <code>alpha</code>, which determines how much to exaggerate the features. A value of <code>alpha = 1.4</code> is used in this example.</p>
                 </li>
 
                 <li>
                     <strong>Perform Delaunay Triangulation:</strong>
-                    <p>We apply a Delaunay triangulation on the new, exaggerated key points to divide the face into triangles. This allows us to warp the face to match the new caricature geometry.</p>
+                    <p>I apply a Delaunay triangulation on the new, exaggerated key points to divide the face into triangles. This allows us to warp the face to match the new caricature geometry.</p>
                 </li>
 
                 <li>
                     <strong>Morph the Face into the Caricature Geometry:</strong>
-                    <p>Using the affine transformation for each triangle, we morph the original face into the exaggerated key points. The result is an exaggerated version of my face or a caricature.</p>
+                    <p>Using the affine transformation for each triangle, I morph the original face into the exaggerated key points. The result is an exaggerated version of my face or a caricature.</p>
                 </li>
             </ol>
 
@@ -334,7 +334,7 @@
     <div class="section-wrapper"></div>
         <section id="bells">
             <h1>Bells and Whistles: Attempting to convert myself to a woman</h1>
-            <p>In this part, we attempt to change the gender of the headshot of myself to appear feminine and with blue eyes. As can be seen by the results below, I look much more feminine in the blended image.</p>
+            <p>In this part, I attempt to change the gender of the headshot of myself to appear feminine and with blue eyes. As can be seen by the results below, I look much more feminine in the blended image.</p>
 
             
 
