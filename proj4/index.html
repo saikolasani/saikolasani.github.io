@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fun with Filters and Frequencies</title>
+    <script type="text/javascript" async
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.1.0/es5/tex-mml-chtml.js">
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        header {
+            background-color: #000000;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+        }
+        section {
+            padding: 2rem;
+            margin: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        h2 {
+            color: #000000;
+        }
+        .container {
+            display: block; 
+        }
+        .section-wrapper {
+            width: 100%; 
+            padding: 10px;
+        }
+        .image-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .image-container img {
+            width: auto; /* Adjusts the width of the images */
+            height: auto;
+        }
+        .text-box {
+            width: 100px; /* Width of the text box */
+            margin-left: 10px; /* Spacing between the image and the text box */
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .gallery-container {
+            margin: 20px;
+        }
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+        .gallery-item {
+            max-width: 300px;
+            text-align: center;
+        }
+        .gallery-item img {
+            width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .gallery-item2 {
+            max-width: 100px;
+            text-align: center;
+        }
+        .gallery-item2 img {
+            width: auto;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .math-container {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        figcaption {
+            margin-top: 8px;
+            font-size: 14px;
+            color: #555;
+        }
+        
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Programming Project #4: IMAGE WARPING and MOSAICING</h1>
+    <h1>By Sai Kolasani</h1>
+</header>
+
+<main class="container">
+    <div class="section-wrapper">
+        <section id="introduction">
+            <h2>Introduction</h2>
+            <p>In this first part of Project 4, we learn how to warp images to other images' geographies given keypoints, as well as how to combine them into photo mosaics (panoramas)! First we get keypoints (in this part, manually), then use those keypoints to calculate the homography matrix. From there, we warp an image to another's basis, then perform Alpha-Gradient Blending to merge the images properly.</p>
+            
+            <h3>My Front Yard</h3>
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/frontyardleft.jpg" alt="Front Yard Left View Image">
+                        <figcaption>Frontyard Left View</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/frontyardright.jpg" alt="Front Yard Right View Image">
+                        <figcaption>Frontyard Right View</figcaption>
+                    </figure>
+                </div>
+            </div>
+            
+            <h3>My Room</h3>
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/roomleft.jpg" alt="Room Left View Image">
+                        <figcaption>Room Left View</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/roomright.jpg" alt="Room Right View Image">
+                        <figcaption>Room Right View</figcaption>
+                    </figure>
+                </div>
+            </div>
+
+            <h3>My Living Room</h3>
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/livingroomleft.jpg" alt="Livingroom Left View Image">
+                        <figcaption>Livingroom Left View</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/livingroomright.jpg" alt="Livingroom Right View Image">
+                        <figcaption>Livingroom Right View</figcaption>
+                    </figure>
+                </div>
+            </div>
+        
+        </section>
+    </div>
+
+    <div class="section-wrapper">
+        <section id="homographies">
+            <h1>Recover Homographies</h1>
+            
+            <p>To align images, we need to compute the transformation between corresponding points in two images. This transformation is represented by a homography matrix <strong>H</strong>, a 3x3 matrix that relates points from one image to another via a projective transformation. Given the relationship <strong>y = H * x</strong>, where <strong>x</strong> and <strong>y</strong> are the corresponding points in the two images, we can compute the homography by solving a system of linear equations derived from the point correspondences.</p>
+
+            <h3>Steps Involved:</h3>
+            <ul>
+                <li><strong>Setting up the System of Equations:</strong>
+                    <p>For each corresponding point pair <code>(x1, y1)</code> from image 1 and <code>(x2, y2)</code> from image 2, two equations are generated from the projective transformation. These equations are linear in the unknown homography parameters.</p>
+                    <p>By stacking the equations for each point pair, we form an overdetermined system of equations <strong>A * h = 0</strong>, where <strong>A</strong> is the matrix of coefficients, and <strong>h</strong> is the vector of unknown homography parameters.</p>
+                </li>
+                <li><strong>Solving with Singular Value Decomposition (SVD):</strong>
+                    <p>The system of equations is solved using Singular Value Decomposition (via <code>np.linalg.svd</code>), which minimizes the error in the transformation due to possible noise or imperfections in point correspondences.</p>
+                    <p>The result is the homography matrix <strong>H</strong>, which can be used to transform points or warp images between the two views.</p>
+                </li>
+                <li><strong>Reshaping the Homography:</strong>
+                    <p>After solving for the parameters, the homography matrix is reshaped into a 3x3 matrix. The bottom-right element is manually set to 1 (since homographies are defined up to a scale), ensuring that the matrix is correctly normalized.</p>
+                </li>
+            </ul>
+            
+            <h3>Theory</h3>
+            <p>The homography relates two images using the equation:</p>
+            <pre>
+              y = H * x
+            </pre>
+            <p>This implies that:</p>
+            <pre>
+              w * y1 = g * x1 + h * x2 + 1
+            </pre>
+            <p>Substituting, we get:</p>
+            <pre>
+              (g * x1 + h * x2 + 1) y1 = a * x1 + b * x2 + c
+              (g * x1 + h * x2 + 1) y2 = d * x1 + e * x2 + f
+            </pre>
+            <p>By linearizing this system, we arrive at the matrix form:</p>
+            <pre>
+              [ x1  y1  1  0  0  0  -x2 * x1  -x2 * y1  -x2 ]
+              [ 0  0  0  x1  y1  1  -y2 * x1  -y2 * y1  -y2 ]
+            </pre>
+            <p>This setup allows us to solve for the homography matrix <strong>H</strong> by stacking equations from multiple points, ensuring we have enough constraints to compute the transformation.</p>
+        </section>
+    </div>
+
+    <div class="section-wrapper">
+        <section id="warp">
+            <h1>Warp the Images</h1>
+
+            <p>This process involves warping one image onto another using a computed homography matrix. The homography matrix allows me to map the pixels of the source image to the perspective of the reference image, aligning them spatially. I also blend the overlapping regions smoothly using an alpha mask to reduce noticeable seams in the final merged image.</p>
+
+            <h3>Steps Overview:</h3>
+
+            <ol>
+            <li><strong>Inverse Homography:</strong> I first compute the inverse of the homography matrix (H) to warp the coordinates of the target image back into the coordinate system of the source image.</li>
+
+            <li><strong>Extract Image Corners:</strong> I identify the corners of the source image and use the homography matrix to determine where those corners would appear in the reference image.</li>
+
+            <li><strong>Determine Output Bounds:</strong> Using the transformed corner coordinates, I calculate the minimum and maximum x and y values to determine the size of the canvas for the warped image.</li>
+
+            <li><strong>Warp Image:</strong> I create a meshgrid for the warped image, apply the inverse homography, and map valid pixels from the source image to the warped image.</li>
+
+            <li><strong>Optional Image Rectification:</strong> If the function is called with the `rectify=True` flag, only the warped image is returned. This step ensures that the two objects are aligned.</li>
+
+            <li><strong>Initialize Merged Image:</strong> If `rectify=False` we return the image mosiac combining both images. For this step, blending is needed, so I initialize a blank canvas for the merged image, which will hold both the warped and reference images.</li>
+
+            <li><strong>Blending:</strong> 
+                <ul>
+                <li>I create an alpha mask for the overlapping region, which gradually transitions from fully opaque to transparent to allow smooth blending of the images.</li>
+                <li>Non-overlapping regions of the source and reference images are copied directly to the merged canvas.</li>
+                <li>In the overlapping region, pixels from the source and reference images are combined using the alpha mask, creating a smooth transition between the two.</li>
+                </ul>
+            </li>
+            </ol>
+
+            <h3>Key Concepts:</h3>
+
+            <ul>
+            <li><strong>Homography:</strong> A projective transformation that maps points from one plane to another. In this context, it transforms the source image to match the perspective of the reference image.</li>
+            <li><strong>Inverse Warping:</strong> To map the pixels of the warped image correctly, I apply the inverse of the homography matrix to warp coordinates back into the source image space.</li>
+            <li><strong>Alpha Blending:</strong> This method allows me to blend the overlapping pixels of two images smoothly, preventing visible seams where the images meet.</li>
+            </ul>
+
+            <p>The result is a composite image in which the source image has been warped and blended seamlessly into the reference image, with no sharp transitions between the two.</p>
+
+            <h3>My Front Yard</h3>
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/frontyardleft.jpg" alt="Front Yard Left View Image">
+                        <figcaption>Frontyard Left View</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/frontyardwarpImage.jpg" alt="Front Yard Left View Warped Image">
+                        <figcaption>Frontyard Left View Warped</figcaption>
+                    </figure>
+                </div>
+            </div>
+            
+            <h3>My Room</h3>
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/roomleft.jpg" alt="Room Left View Image">
+                        <figcaption>Room Left View</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/bedroomwarpImage.jpg" alt="Room Left View Warped Image">
+                        <figcaption>Room Left View Warped</figcaption>
+                    </figure>
+                </div>
+            </div>
+
+            <h3>My Living Room</h3>
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/livingroomleft.jpg" alt="Livingroom Left View Image">
+                        <figcaption>Livingroom Left View</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/livingroomwarpImage.jpg" alt="Livingroom Left View Warped Image">
+                        <figcaption>Livingroom Left View Warped</figcaption>
+                    </figure>
+                </div>
+            </div>
+
+        </section>
+    </div>
+
+    <div class="section-wrapper">
+        <section id="rect">
+            <h1>Image Rectification</h1>
+            
+            <p>In this section, we employ the previously discussed homography computation to rectify an image, transforming a known distorted rectangular object into its proper alignment. The goal of image rectification is to warp the perspective of an object in an image (such as a painting or poster on a tilted surface) so that it appears frontal or aligned with the camera's plane of view. This is especially useful in tasks that require geometric consistency, such as 3D reconstruction, mapping, or architectural analysis.</p>
+
+            <p>The rectification process begins by identifying the four corner points (<code>im1_points</code>) of the known rectangular object in the input image. These points define the boundaries of the object before rectification. We then specify the desired output rectangle’s dimensions (<code>im2_points</code>), ensuring that the warped object will have the correct aspect ratio and appear undistorted.</p>
+
+            <p>We then compute the homography matrix <code>H</code> using the <code>computeH</code> function. This matrix captures the transformation from the input points (the distorted object in the image) to the ideal rectified rectangle. In this case, we compute the inverse homography matrix to map the original distorted points into a flat rectangle.</p>
+
+            <p>After computing the homography matrix, we utilize the <code>warpImage</code> function to warp the image based on this transformation, producing a rectified image.</p>
+            
+            <h3>Frame</h3>
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/frame.jpg" alt="Frame Image">
+                        <figcaption>Frame</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/framewarpImage.jpg" alt="Frame Rectified Image">
+                        <figcaption>Frame Rectified</figcaption>
+                    </figure>
+                </div>
+            </div>
+
+            <h3>Container Box</h3>
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/box.jpg" alt="Container Image">
+                        <figcaption>Container</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/boxwarpImage.jpg" alt="Container Rectified Image">
+                        <figcaption>Container Rectified</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/boxwarpcroppedImage.png" alt="Container Rectified Image">
+                        <figcaption>Container Rectified (Cropped)</figcaption>
+                    </figure>
+                </div>
+            </div>
+
+        </section>
+    </div>
+
+    <div class="section-wrapper"></div>
+        <section id="mosiac">
+            <h1>Blending Images into a Mosaic</h1>
+            
+            <p>To seamlessly blend the warped images into a mosaic, I use a <strong>linear alpha gradient</strong> to ensure a smooth transition between overlapping regions. This blending technique prevents visible seams or harsh edges between the images by gradually transitioning pixel contributions from one image to another across the overlap region.</p>
+
+            <h3>Alpha Gradient Mask Creation</h3>
+            <p>The alpha mask is generated using a linear gradient that transitions smoothly across the entire overlap region. The mask starts with a value of 1 on one side (where the reference image contributes fully) and transitions to 0 on the other side (where the warped image contributes fully). This gradual change ensures a smooth blend between the two images.</p>
+
+            <h3>Blending Procedure</h3>
+            <p>Once the alpha gradient mask is created, it is applied to the overlap region. For each pixel, the reference image's value is weighted by the alpha mask value, and the warped image's value is weighted by 1 minus the alpha mask value. This results in a seamless blend without visible seams in the overlap region.</p>
+
+            <h3>Steps in Code</h3>
+            <ul>
+            <li><strong>Alpha Gradient Mask Creation</strong>: A linear gradient is generated using <code>np.linspace</code>. The mask smoothly transitions from one image to the other across the overlap region.</li>
+            <li><strong>Applying the Mask</strong>: The alpha mask is applied to the overlapping region. Pixels from the warped image are weighted by the alpha mask, and pixels from the reference image are weighted by 1 minus the alpha values.</li>
+            <li><strong>Blending</strong>: The blended image is created using this linear gradient, resulting in a seamless transition between the two images.</li>
+            </ul>
+
+
+
+            <h3>My Front Yard</h3>
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/frontyardleft.jpg" alt="Front Yard Left View Image">
+                        <figcaption>Frontyard Left View</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/frontyardright.jpg" alt="Front Yard Right View Image">
+                        <figcaption>Frontyard Right View</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/frontyardmergeImage.jpg" alt="Front Yard Mosiac View Image">
+                        <figcaption>Frontyard Mosiac</figcaption>
+                    </figure>
+                </div>
+            </div>
+            
+            <h3>My Room</h3>
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/roomleft.jpg" alt="Room Left View Image">
+                        <figcaption>Room Left View</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/roomright.jpg" alt="Room Right View Image">
+                        <figcaption>Room Right View</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/bedroommergeImage.jpg" alt="Room Mosiac View Image">
+                        <figcaption>Room Mosiac</figcaption>
+                    </figure>
+                </div>
+            </div>
+
+            <h3>My Living Room</h3>
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/livingroomleft.jpg" alt="Livingroom Left View Image">
+                        <figcaption>Livingroom Left View</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/livingroomright.jpg" alt="Livingroom Right View Image">
+                        <figcaption>Livingroom Right View</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/livingroommergeImage.jpg" alt="Livingroom Mosiac View Image">
+                        <figcaption>Livingroom Mosiac</figcaption>
+                    </figure>
+                </div>
+            </div>
+            
+            
+        </section>
+    </div>
+
+    
+</main>
+
+</body>
+</html>
