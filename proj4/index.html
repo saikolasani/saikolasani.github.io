@@ -107,7 +107,7 @@
     <div class="section-wrapper">
         <section id="introduction">
             <h1>Introduction</h1>
-            <p>In this first part of Project 4, we learn how to warp images to other images' geographies given keypoints, as well as how to combine them into photo mosaics (panoramas)! First we get keypoints (in this part, manually), then use those keypoints to calculate the homography matrix. From there, we warp an image to another's basis, then perform Alpha-Gradient Blending to merge the images properly.</p>
+            <p>In this first part of Project 4, I learn how to warp images to other images' geographies given keypoints, as well as how to combine them into photo mosaics (panoramas)! First I get keypoints (in this part, manually), then use those keypoints to calculate the homography matrix. From there, I warp an image to another's basis, then perform Alpha-Gradient Blending to merge the images properly.</p>
             
             <h3>My Front Yard</h3>
             <div class="gallery-container">
@@ -158,17 +158,17 @@
         <section id="homographies">
             <h1>Recover Homographies</h1>
             
-            <p>To align images, we need to compute the transformation between corresponding points in two images. This transformation is represented by a homography matrix <strong>H</strong>, a 3x3 matrix that relates points from one image to another via a projective transformation. Given the relationship <strong>y = H * x</strong>, where <strong>x</strong> and <strong>y</strong> are the corresponding points in the two images, we can compute the homography by solving a system of linear equations derived from the point correspondences.</p>
+            <p>To align images, I need to compute the transformation between corresponding points in two images. This transformation is represented by a homography matrix <strong>H</strong>, a 3x3 matrix that relates points from one image to another via a projective transformation. Given the relationship <strong>y = H * x</strong>, where <strong>x</strong> and <strong>y</strong> are the corresponding points in the two images, I can compute the homography by solving a system of linear equations derived from the point correspondences.</p>
 
             <h3>Steps Involved:</h3>
             <ul>
                 <li><strong>Setting up the System of Equations:</strong>
                     <p>For each corresponding point pair <code>(x1, y1)</code> from image 1 and <code>(x2, y2)</code> from image 2, two equations are generated from the projective transformation. These equations are linear in the unknown homography parameters.</p>
-                    <p>By stacking the equations for each point pair, we form an overdetermined system of equations <strong>A * h = 0</strong>, where <strong>A</strong> is the matrix of coefficients, and <strong>h</strong> is the vector of unknown homography parameters.</p>
+                    <p>By stacking the equations for each point pair, I form an overdetermined system of equations <strong>A * h = 0</strong>, where <strong>A</strong> is the matrix of coefficients, and <strong>h</strong> is the vector of unknown homography parameters.</p>
                 </li>
                 <li><strong>Solving with Singular Value Decomposition (SVD):</strong>
                     <p>The system of equations is solved using Singular Value Decomposition (via <code>np.linalg.svd</code>), which minimizes the error in the transformation due to possible noise or imperfections in point correspondences.</p>
-                    <p>The result is the homography matrix <strong>H</strong>, which can be used to transform points or warp images between the two views.</p>
+                    <p>The result is the homography matrix <strong>H</strong>, which can be used to transform points or warp images betIen the two views.</p>
                 </li>
                 <li><strong>Reshaping the Homography:</strong>
                     <p>After solving for the parameters, the homography matrix is reshaped into a 3x3 matrix. The bottom-right element is manually set to 1 (since homographies are defined up to a scale), ensuring that the matrix is correctly normalized.</p>
@@ -184,12 +184,12 @@
             <pre>
               w * y1 = g * x1 + h * x2 + 1
             </pre>
-            <p>Substituting, we get:</p>
+            <p>Substituting, I get:</p>
             <pre>
               (g * x1 + h * x2 + 1) y1 = a * x1 + b * x2 + c
               (g * x1 + h * x2 + 1) y2 = d * x1 + e * x2 + f
             </pre>
-            <p>By linearizing this system, we arrive at the matrix form:</p>
+            <p>By linearizing this system, I arrive at the matrix form:</p>
             <pre>
               [ x1  y1  1  0  0  0  -x2 * x1  -x2 * y1  -x2 ]
               [ 0  0  0  x1  y1  1  -y2 * x1  -y2 * y1  -y2 ]
@@ -217,7 +217,7 @@
 
             <li><strong>Optional Image Rectification:</strong> If the function is called with the `rectify=True` flag, only the warped image is returned. This step ensures that the two objects are aligned.</li>
 
-            <li><strong>Initialize Merged Image:</strong> If `rectify=False` we return the image mosiac combining both images. For this step, blending is needed, so I initialize a blank canvas for the merged image, which will hold both the warped and reference images.</li>
+            <li><strong>Initialize Merged Image:</strong> If `rectify=False` I return the image mosiac combining both images. For this step, blending is needed, so I initialize a blank canvas for the merged image, which will hold both the warped and reference images.</li>
 
             <li><strong>Blending:</strong> 
                 <ul>
@@ -287,13 +287,13 @@
         <section id="rect">
             <h1>Image Rectification</h1>
             
-            <p>In this section, we employ the previously discussed homography computation to rectify an image, transforming a known distorted rectangular object into its proper alignment. The goal of image rectification is to warp the perspective of an object in an image (such as a painting or poster on a tilted surface) so that it appears frontal or aligned with the camera's plane of view. This is especially useful in tasks that require geometric consistency, such as 3D reconstruction, mapping, or architectural analysis.</p>
+            <p>In this section, I employ the previously discussed homography computation to rectify an image, transforming a known distorted rectangular object into its proper alignment. The goal of image rectification is to warp the perspective of an object in an image (such as a painting or poster on a tilted surface) so that it appears frontal or aligned with the camera's plane of view. This is especially useful in tasks that require geometric consistency, such as 3D reconstruction, mapping, or architectural analysis.</p>
 
-            <p>The rectification process begins by identifying the four corner points (<code>im1_points</code>) of the known rectangular object in the input image. These points define the boundaries of the object before rectification. We then specify the desired output rectangle’s dimensions (<code>im2_points</code>), ensuring that the warped object will have the correct aspect ratio and appear undistorted.</p>
+            <p>The rectification process begins by identifying the four corner points (<code>im1_points</code>) of the known rectangular object in the input image. These points define the boundaries of the object before rectification. I then specify the desired output rectangle’s dimensions (<code>im2_points</code>), ensuring that the warped object will have the correct aspect ratio and appear undistorted.</p>
 
-            <p>We then compute the homography matrix <code>H</code> using the <code>computeH</code> function. This matrix captures the transformation from the input points (the distorted object in the image) to the ideal rectified rectangle. In this case, we compute the inverse homography matrix to map the original distorted points into a flat rectangle.</p>
+            <p>I then compute the homography matrix <code>H</code> using the <code>computeH</code> function. This matrix captures the transformation from the input points (the distorted object in the image) to the ideal rectified rectangle. In this case, I compute the inverse homography matrix to map the original distorted points into a flat rectangle.</p>
 
-            <p>After computing the homography matrix, we utilize the <code>warpImage</code> function to warp the image based on this transformation, producing a rectified image.</p>
+            <p>After computing the homography matrix, I utilize the <code>warpImage</code> function to warp the image based on this transformation, producing a rectified image.</p>
             
             <h3>Frame</h3>
             <div class="gallery-container">
@@ -426,16 +426,19 @@
         <section id="corners">
             <h1>Corner Detection</h1>
             
-            <p>In this step, we implement the Harris Interest Point Detector to find key points or corners in an image. These key points are essential for tasks such as feature matching and image alignment, as they represent distinct points that are repeatable and consistent between images. The Harris corner detector works by identifying areas in the image where there are sharp changes in intensity in two perpendicular directions, which are typically good indicators of corners.</p>
+            <p>In this step, I implement the Harris Interest Point Detector to find key points or corners in an image. These key points are essential for tasks such as feature matching and image alignment, as they represent distinct points that are repeatable and consistent between images. The Harris corner detector works by identifying areas in the image where there are sharp changes in intensity in two perpendicular directions, which are typically good indicators of corners.</p>
             
             <p>Below is an example of the Harris Corners for the Bedroom Picture</p>
 
             <div class="gallery-container">
                 <div class="gallery">
                     <figure class="gallery-item">
-                        <img src="assets/livingroomleft.jpg" alt="Livingroom Left View Image">
-                        <figcaption>Livingroom Left View</figcaption>
+                        <img src="assets/left_image_with_harris_corners.jpg" alt="Harris Corners on left Livingroom">
                     </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/right_image_with_harris_corners.jpg" alt="Harris Corners on right Livingroom">
+                    </figure>
+                </div>
             </div>
 
         </section>
@@ -485,9 +488,12 @@
             <div class="gallery-container">
                 <div class="gallery">
                     <figure class="gallery-item">
-                        <img src="assets/livingroomleft.jpg" alt="Livingroom Left View Image">
-                        <figcaption>Livingroom Left View</figcaption>
+                        <img src="assets/left_image_with_selected_points.jpg" alt="ANMS Selected Points on left Livingroom">
                     </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/right_image_with_selected_points.jpg" alt="ANMS Selected Points on right Livingroom">
+                    </figure>
+                </div>
             </div>
 
         </section>
@@ -528,9 +534,12 @@
             <div class="gallery-container">
                 <div class="gallery">
                     <figure class="gallery-item">
-                        <img src="assets/livingroomleft.jpg" alt="Livingroom Left View Image">
-                        <figcaption>Livingroom Left View</figcaption>
+                        <img src="assets/left_feature_descriptor.jpg" alt="First Feature Descriptor of Left Image">
                     </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/right_feature_descriptor.jpg" alt="First Feature Descriptor of Right Image">
+                    </figure>
+                </div>
             </div>
 
         </section>
@@ -540,7 +549,7 @@
         <section id="matching">
             <h1>Feature Matching</h1>
             
-            <p>In this step, we perform <strong>feature matching</strong> between two sets of feature descriptors extracted from two images. Feature matching helps establish correspondences between keypoints in different images, which is crucial for tasks such as image alignment, homography estimation, and 3D reconstruction. The matching is based on the <strong>1-NN/2-NN ratio test</strong> proposed by David Lowe, which compares each descriptor with its closest and second-closest neighbors.</p>
+            <p>In this step, I perform <strong>feature matching</strong> between two sets of feature descriptors extracted from two images. Feature matching helps establish correspondences between keypoints in different images, which is crucial for tasks such as image alignment, homography estimation, and 3D reconstruction. The matching is based on the <strong>1-NN/2-NN ratio test</strong> proposed by David Lowe, which compares each descriptor with its closest and second-closest neighbors.</p>
 
             <h3>Key Steps in Feature Matching:</h3>
 
@@ -566,13 +575,7 @@
                 </li>
             </ul>
 
-            <div class="gallery-container">
-                <div class="gallery">
-                    <figure class="gallery-item">
-                        <img src="assets/livingroomleft.jpg" alt="Livingroom Left View Image">
-                        <figcaption>Livingroom Left View</figcaption>
-                    </figure>
-            </div>
+            <img src="assets/matched_livingroom_keypoints.jpg" alt="Matched Livingroom Keypoints">
 
         </section>
     </div>
@@ -581,7 +584,7 @@
         <section id="ransac">
             <h1>RANSAC</h1>
             
-            <p>In this step, we use the <strong>Random Sample Consensus (RANSAC)</strong> algorithm to compute a robust homography between two sets of matched points from different images. RANSAC is used to eliminate outliers (incorrect matches) and retain only the inliers (correct matches), resulting in a more accurate homography estimation. Homography is a transformation that maps points in one image to corresponding points in another image, which is essential for tasks like image stitching and alignment.</p>
+            <p>In this step, I use the <strong>Random Sample Consensus (RANSAC)</strong> algorithm to compute a robust homography between two sets of matched points from different images. RANSAC is used to eliminate outliers (incorrect matches) and retain only the inliers (correct matches), resulting in a more accurate homography estimation. Homography is a transformation that maps points in one image to corresponding points in another image, which is essential for tasks like image stitching and alignment.</p>
 
             <h3>Key Steps in RANSAC for Homography Estimation:</h3>
 
@@ -625,13 +628,9 @@
 
             <h4>This final set of inliers is used to create a new Homography matrix which is then used to create the mosiacs as in the part A.</h4>
 
-            <div class="gallery-container">
-                <div class="gallery">
-                    <figure class="gallery-item">
-                        <img src="assets/livingroomleft.jpg" alt="Livingroom Left View Image">
-                        <figcaption>Livingroom Left View</figcaption>
-                    </figure>
-            </div>
+           
+            <img src="assets/ransac_final_inliers.jpg" alt="Livingroom Inliers Image">
+                        
 
         </section>
     </div>
@@ -645,12 +644,12 @@
             <div class="gallery-container">
                 <div class="gallery">
                     <figure class="gallery-item">
-                        <img src="assets/frontyardleft.jpg" alt="Front Yard Left View Image">
-                        <figcaption>Frontyard Left View</figcaption>
+                        <img src="assets/frontyardmergeImage.jpg" alt="Manual Stitching Image">
+                        <figcaption>Frontyard Manual Stitching</figcaption>
                     </figure>
                     <figure class="gallery-item">
-                        <img src="assets/frontyardright.jpg" alt="Front Yard Right View Image">
-                        <figcaption>Frontyard Right View</figcaption>
+                        <img src="assets/frontyard_auto_merge_image.jpg" alt="Automatic Stitching Image">
+                        <figcaption>Frontyard Automatic Stitching</figcaption>
                     </figure>
                 </div>
             </div>
@@ -659,12 +658,12 @@
             <div class="gallery-container">
                 <div class="gallery">
                     <figure class="gallery-item">
-                        <img src="assets/roomleft.jpg" alt="Room Left View Image">
-                        <figcaption>Room Left View</figcaption>
+                        <img src="assets/bedroommergeImage.jpg" alt="Manual Stitching Image">
+                        <figcaption>Bedroom Manual Stitching</figcaption>
                     </figure>
                     <figure class="gallery-item">
-                        <img src="assets/roomright.jpg" alt="Room Right View Image">
-                        <figcaption>Room Right View</figcaption>
+                        <img src="assets/bedroom_auto_merge_image.jpg" alt="Automatic Stitching Image">
+                        <figcaption>Bedroom Automatic Stitching</figcaption>
                     </figure>
                 </div>
             </div>
@@ -673,16 +672,17 @@
             <div class="gallery-container">
                 <div class="gallery">
                     <figure class="gallery-item">
-                        <img src="assets/livingroomleft.jpg" alt="Livingroom Left View Image">
-                        <figcaption>Livingroom Left View</figcaption>
+                        <img src="assets/livingroommergeImage.jpg" alt="Manual Stitching Image">
+                        <figcaption>Livingroom Manual Stitching</figcaption>
                     </figure>
                     <figure class="gallery-item">
-                        <img src="assets/livingroomright.jpg" alt="Livingroom Right View Image">
-                        <figcaption>Livingroom Right View</figcaption>
+                        <img src="assets/livingroom_auto_merge_image.jpg" alt="Automatic Stitching Image">
+                        <figcaption>Livingroom Automatic Stitching</figcaption>
                     </figure>
                 </div>
             </div>
         
+            <h3>In my opinion the frontyard and the livingroom look much more clear especially in the merged regions of the images with the automatic stitching. This is because more keypoints were selected by the algorithms. I chose very distinct easily identifiable points for the manual implementation.</h3>
         </section>
     </div>
 
