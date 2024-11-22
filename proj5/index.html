@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fun With Diffusion Models!</title>
+    <script type="text/javascript" async
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.1.0/es5/tex-mml-chtml.js">
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        header {
+            background-color: #000000;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+        }
+        section {
+            padding: 2rem;
+            margin: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        h2 {
+            color: #000000;
+        }
+        .container {
+            display: block; 
+        }
+        .section-wrapper {
+            width: 100%; 
+            padding: 10px;
+        }
+        .image-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .image-container img {
+            width: auto; /* Adjusts the width of the images */
+            height: auto;
+        }
+        .text-box {
+            width: 100px; /* Width of the text box */
+            margin-left: 10px; /* Spacing between the image and the text box */
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .gallery-container {
+            margin: 20px;
+        }
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+        .gallery-item {
+            max-width: 300px;
+            text-align: center;
+        }
+        .gallery-item img {
+            width: 150px;
+            height: 150px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .gallery-item2 {
+            max-width: 300px;
+            text-align: center;
+        }
+        .gallery-item2 img {
+            width: auto;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .math-container {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        figcaption {
+            margin-top: 8px;
+            font-size: 14px;
+            color: #555;
+        }
+        
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Programming Project #5: Fun With Diffusion Models</h1>
+    <h1>By Sai Kolasani</h1>
+</header>
+
+<main class="container">
+    <div class="section-wrapper">
+        <section id="introduction">
+            <h1>Introduction</h1>
+            <p>In this project I implement and deploy diffusion models for image generation. It is divided into two parts. In part A, I use Stability AI's DeepFloyd Model
+                implement diffusion sampling loops, and use them for other tasks such as inpainting and creating optical illusions. In part B, I implement a UNet Models 
+                from Scratch.
+            </p>
+        </section>
+    </div>
+
+    <div class="section-wrapper">
+        <section id="PartA">
+            <h1>Part A: The Power of Diffusion Models!</h1>
+            <h2>Diffusion Model: Forward Process</h2>
+            <p>The forward process gradually adds noise to a clean image \(x_0\), resulting in a noisy image \(x_t\).</p>
+            <p><strong>Original Image (x₀)</strong></p>
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/campanile.png" alt="Campanile">
+                        <figcaption>Campanile</figcaption>
+                    </figure>
+                </div>
+            </div>
+            <p><strong>Noisy Images at Different Timesteps</strong></p>
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/noisy_250.png" alt="Noisy Image t=250">
+                        <figcaption>Noisy Image t=250</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/noisy_500.png" alt="Noisy Image t=500">
+                        <figcaption>Noisy Image t=500</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/noisy_750.png" alt="Noisy Image t=750">
+                        <figcaption>Noisy Image t=750</figcaption>
+                    </figure>
+                </div>
+            </div>
+            
+            <h2>Classical Denoising</h2>
+            <p>
+                In this section, we apply classical Gaussian blur filtering to the noisy images generated in the forward process.
+                Gaussian blur is a simple denoising technique that removes high-frequency noise.
+            </p>
+            <p><strong>Noisy Images at Different Timesteps</strong></p>
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/noisy_250.png" alt="Noisy Image t=250">
+                        <figcaption>Noisy Image t=250</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/noisy_500.png" alt="Noisy Image t=500">
+                        <figcaption>Noisy Image t=500</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/noisy_750.png" alt="Noisy Image t=750">
+                        <figcaption>Noisy Image t=750</figcaption>
+                    </figure>
+                </div>
+            </div>
+            <p><strong>Gaussian Blur Denoising at Different Timesteps</strong></p>
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/gaussian_250.png" alt="Gaussian Denoised Image t=250">
+                        <figcaption>Gaussian Blur Denoising at t=250</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/gaussian_500.png" alt="Gaussian Blur Denoising at t=250">
+                        <figcaption>Gaussian Blur Denoising at t=500</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/gaussian_750.png" alt="Gaussian Blur Denoising at t=250">
+                        <figcaption>Gaussian Blur Denoising at t=750</figcaption>
+                    </figure>
+                </div>
+            </div>
+            
+            <h2>One Step Denoising</h2>
+            <p>
+                In this section, we use a pretrained diffusion model to denoise noisy images generated in the forward process.
+                The pretrained UNet model is conditioned on Gaussian noise levels, allowing it to estimate and remove noise
+                from noisy images at different timesteps.
+            </p>
+            <p>
+                Additionally, this model is text-conditioned, so we pass a text prompt <code>"a high quality photo"</code>
+                to help guide the denoising process. This prompt embedding provides additional context to the UNet.
+            </p>
+            <p><strong>Noisy Images at Different Timesteps</strong></p>
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/noisy_250.png" alt="Noisy Image t=250">
+                        <figcaption>Noisy Image t=250</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/noisy_500.png" alt="Noisy Image t=500">
+                        <figcaption>Noisy Image t=500</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/noisy_750.png" alt="Noisy Image t=750">
+                        <figcaption>Noisy Image t=750</figcaption>
+                    </figure>
+                </div>
+            </div>
+            <p><strong>One Step Denoising at Different Timesteps</strong></p>
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/onestep_250.png" alt="One Step Denoised Image t=250">
+                        <figcaption>One Step Denoising at t=250</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/onestep_500.png" alt="One Step Denoising at t=250">
+                        <figcaption>One Step Denoising at t=500</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/onestep_750.png" alt="One Step Denoising at t=250">
+                        <figcaption>One Step Denoising at t=750</figcaption>
+                    </figure>
+                </div>
+            </div>
+            
+            <h2>Iterative Denoising</h2>
+            <p>
+                In the previous section, we used a pretrained UNet to perform one-step denoising. However, diffusion models
+                are designed for iterative denoising, progressively refining noisy images until we obtain an estimate of the
+                original clean image \(x_0\).
+            </p>
+            <p>
+                Instead of performing 1000 steps (which is computationally expensive), we use a technique called 
+                <strong>strided timesteps</strong> to skip steps and speed up the process. By choosing a regular stride 
+                (e.g., 30), we reduce the number of timesteps while maintaining denoising quality.
+            </p>
+            <p><strong>Noisy to Clean Image Transition</strong></h2>
+            <p>
+                Below, we show the iterative denoising process using strided timesteps (\(t = 690, 540, 390, 240, 90\)):
+            </p>
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/noisy_iterative_90.png" alt="Noisy Campanile at t=90">
+                        <figcaption>Noisy Campanile at t=90</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/noisy_iterative_240.png" alt="Noisy Campanile at t=240">
+                        <figcaption>Noisy Campanile at t=240</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/noisy_iterative_390.png" alt="Noisy Campanile at t=390">
+                        <figcaption>Noisy Campanile at t=390</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/noisy_iterative_540.png" alt="Noisy Campanile at t=540">
+                        <figcaption>Noisy Campanile at t=540</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/noisy_iterative_690.png" alt="Noisy Campanile at t=690">
+                        <figcaption>Noisy Campanile at t=690</figcaption>
+                    </figure>
+                </div>
+            </div>
+
+            <p><strong>Predicted Clean Images</strong></p>
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/campanile.png" alt="Original">
+                        <figcaption>Original</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/iterative_image.jpg" alt="Iteratively Denoised Campanile">
+                        <figcaption>Iteratively Denoised Campanile</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/onestep_image.jpg" alt="One-Step Denoised Campanile">
+                        <figcaption>One-Step Denoised Campanile</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/gaussian_image.jpg" alt="Gaussian Blurred Campanile">
+                        <figcaption>Gaussian Blurred Campanile</figcaption>
+                    </figure>
+                </div>
+            </div>
+
+            <h2>Diffusion Model Sampling</h2>
+            <p>
+                In this section, we use the diffusion model to generate images from random noise.
+                By starting at \(i_{\text{start}} = 0\), we begin the denoising process with pure noise and iterate until
+                the final clean image is obtained. This effectively allows the model to create new images from scratch.
+            </p>
+            <p>
+                For this example, we use the text prompt <code>"a high quality photo"</code> to guide the image generation.
+                Below are 5 samples generated by the model:
+            </p>
+
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/generated_sample_1.png" alt="Sample 1">
+                        <figcaption>Sample 1</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/generated_sample_2.png" alt="Sample 2">
+                        <figcaption>Sample 2</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/generated_sample_3.png" alt="Sample 3">
+                        <figcaption>Sample 3</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/generated_sample_4.png" alt="Sample 4">
+                        <figcaption>Sample 4</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/generated_sample_5.png" alt="Sample 5">
+                        <figcaption>Sample 5</figcaption>
+                    </figure>
+                </div>
+            </div>
+
+            <h1>Classifier-Free Guidance (CFG)</h1>
+            <p>
+                Classifier-Free Guidance (CFG) is a technique that enhances image quality by balancing conditional
+                and unconditional noise estimates. In CFG, we compute both a noise estimate conditioned on a text prompt
+                (\( \epsilon_c \)) and an unconditional noise estimate (\( \epsilon_u \)). The final noise estimate is given by:
+            </p>
+            <div class="formula">
+                \[
+                \epsilon = \epsilon_u + \gamma (\epsilon_c - \epsilon_u)
+                \]
+            </div>
+            <p>
+                Here, \( \gamma \) controls the strength of the guidance. When \( \gamma = 0 \), we use the unconditional noise
+                estimate, and when \( \gamma = 1 \), we fully condition on the text prompt. For \( \gamma > 1 \), we achieve
+                higher-quality images by amplifying the guidance signal. For more details, refer to 
+                <a href="https://sander.ai/2022/05/26/guidance.html" target="_blank">this blog post</a>.
+            </p>
+
+            <p><strong>Generated Images</strong></p>
+            <p>Below are 5 images generated using CFG with \( \gamma = 7 \):</p>
+            
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/cfg_generated_sample_1.png" alt="Sample 1">
+                        <figcaption>Sample 1</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/cfg_generated_sample_2.png" alt="Sample 2">
+                        <figcaption>Sample 2</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/cfg_generated_sample_3.png" alt="Sample 3">
+                        <figcaption>Sample 3</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/cfg_generated_sample_4.png" alt="Sample 4">
+                        <figcaption>Sample 4</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/cfg_generated_sample_5.png" alt="Sample 5">
+                        <figcaption>Sample 5</figcaption>
+                    </figure>
+                </div>
+            </div>
+            
+            <h1>Image-to-Image Translation</h1>
+            <p>
+                Image-to-image translation involves taking an existing image, adding controlled amounts of noise to it,
+                and using a diffusion model to denoise it back into the natural image manifold. This process allows us
+                to make creative "edits" to the original image, where the degree of noise determines the extent of the edits.
+            </p>
+
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/campanile_sde_1.png" alt="SDEdit with i_start=1">
+                        <figcaption>SDEdit with i_start=1</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/campanile_sde_3.png" alt="SDEdit with i_start=3">
+                        <figcaption>SDEdit with i_start=3</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/campanile_sde_5.png" alt="SDEdit with i_start=5">
+                        <figcaption>SDEdit with i_start=5</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/campanile_sde_7.png" alt="SDEdit with i_start=7">
+                        <figcaption>SDEdit with i_start=7</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/campanile_sde_10.png" alt="SDEdit with i_start=10">
+                        <figcaption>SDEdit with i_start=10</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/campanile_sde_20.png" alt="SDEdit with i_start=20">
+                        <figcaption>SDEdit with i_start=20</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/campanile.png" alt="Original">
+                        <figcaption>Original</figcaption>
+                    </figure>
+                </div>
+            </div>
+
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/taj_sde_1.png" alt="SDEdit with i_start=1">
+                        <figcaption>SDEdit with i_start=1</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/taj_sde_3.png" alt="SDEdit with i_start=3">
+                        <figcaption>SDEdit with i_start=3</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/taj_sde_5.png" alt="SDEdit with i_start=5">
+                        <figcaption>SDEdit with i_start=5</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/taj_sde_7.png" alt="SDEdit with i_start=7">
+                        <figcaption>SDEdit with i_start=7</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/taj_sde_10.png" alt="SDEdit with i_start=10">
+                        <figcaption>SDEdit with i_start=10</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/taj_sde_20.png" alt="SDEdit with i_start=20">
+                        <figcaption>SDEdit with i_start=20</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/taj.png" alt="Original">
+                        <figcaption>Original</figcaption>
+                    </figure>
+                </div>
+            </div>
+
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/tower_sde_1.png" alt="SDEdit with i_start=1">
+                        <figcaption>SDEdit with i_start=1</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/tower_sde_3.png" alt="SDEdit with i_start=3">
+                        <figcaption>SDEdit with i_start=3</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/tower_sde_5.png" alt="SDEdit with i_start=5">
+                        <figcaption>SDEdit with i_start=5</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/tower_sde_7.png" alt="SDEdit with i_start=7">
+                        <figcaption>SDEdit with i_start=7</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/tower_sde_10.png" alt="SDEdit with i_start=10">
+                        <figcaption>SDEdit with i_start=10</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/tower_sde_20.png" alt="SDEdit with i_start=20">
+                        <figcaption>SDEdit with i_start=20</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/tower.png" alt="Original">
+                        <figcaption>Original</figcaption>
+                    </figure>
+                </div>
+            </div>
+            
+            <h1>Editing Hand-Drawn and Web Images</h1>
+            <p>
+                This procedure is particularly effective when applied to non-realistic images, such as hand-drawn sketches,
+                paintings, or abstract scribbles. By applying diffusion models, we can project these images onto the natural
+                image manifold, resulting in creative transformations. Below, we experiment with various hand-drawn and web images, 
+                running them through iterative denoising processes to see how they evolve into realistic outputs. 
+            </p>
+
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/tom_start_1.png" alt="Tom at i_start=1">
+                        <figcaption>Tom at i_start=1</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/tom_start_5.png" alt="Tom at i_start=5">
+                        <figcaption>Tom at i_start=5</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/tom_start_7.png" alt="Tom at i_start=7">
+                        <figcaption>Tom at i_start=7</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/tom_start_10.png" alt="Tom at i_start=10">
+                        <figcaption>Tom at i_start=10</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/tom_start_20.png" alt="Tom at i_start=20">
+                        <figcaption>Tom at i_start=20</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/tom_start_30.png" alt="Tom at i_start=30">
+                        <figcaption>Tom at i_start=30</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/tom.png" alt="Original">
+                        <figcaption>Tom</figcaption>
+                    </figure>
+                </div>
+            </div>
+
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/house_start_1.png" alt="House at i_start=1">
+                        <figcaption>House at i_start=1</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/house_start_5.png" alt="House at i_start=5">
+                        <figcaption>House at i_start=5</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/house_start_7.png" alt="House at i_start=7">
+                        <figcaption>House at i_start=7</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/house_start_10.png" alt="House at i_start=10">
+                        <figcaption>House at i_start=10</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/house_start_20.png" alt="House at i_start=20">
+                        <figcaption>House at i_start=20</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/house_start_30.png" alt="House at i_start=30">
+                        <figcaption>House at i_start=30</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/house_handdrawn.png" alt="Original">
+                        <figcaption>House</figcaption>
+                    </figure>
+                </div>
+            </div>
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/flower_start_1.png" alt="Flower at i_start=1">
+                        <figcaption>Flower at i_start=1</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/flower_start_5.png" alt="Flower at i_start=5">
+                        <figcaption>Flower at i_start=5</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/flower_start_7.png" alt="Flower at i_start=7">
+                        <figcaption>Flower at i_start=7</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/flower_start_10.png" alt="Flower at i_start=10">
+                        <figcaption>Flower at i_start=10</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/flower_start_20.png" alt="Flower at i_start=20">
+                        <figcaption>Flower at i_start=20</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/flower_start_30.png" alt="Flower at i_start=30">
+                        <figcaption>Flower at i_start=30</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/flower_handdrawn.png" alt="Original">
+                        <figcaption>Flower</figcaption>
+                    </figure>
+                </div>
+            </div>
+
+            <h1>Inpainting</h1>
+            <p>
+                Inpainting involves restoring or editing specific parts of an image while preserving the rest.
+                This method is inspired by the <a href="https://arxiv.org/abs/2201.09865" target="_blank">RePaint paper</a>,
+                which utilizes diffusion models to fill in missing or altered parts of an image.
+            </p>
+            <h4>Formula</h4>
+            <p>
+                At each timestep <code>t</code>, we update the image as follows:
+            </p>
+            <pre>
+            x_t = m * x_t + (1 - m) * forward(x_orig, t)
+            </pre>
+
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/camponile_small.jpg" alt="Campanile">
+                        <figcaption>Campanile</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/mask1.jpg" alt="Mask">
+                        <figcaption>Mask</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/campanile_inpainted_image.jpg" alt="Campanile Inpainted">
+                        <figcaption>Campanile Inpainted</figcaption>
+                    </figure>
+                </div>
+            </div>
+
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/taj.png" alt="Taj Mahal">
+                        <figcaption>Taj Mahal</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/mask2.jpg" alt="Mask">
+                        <figcaption>Mask</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/taj_inpainted_image.jpg" alt="Taj Mahal Inpainted">
+                        <figcaption>Taj Mahal Inpainted</figcaption>
+                    </figure>
+                </div>
+            </div>
+
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/tower.png" alt="Tower">
+                        <figcaption>Tower</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/mask3.jpg" alt="Mask">
+                        <figcaption>Mask</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/tower_inpainted_image.jpg" alt="Taj Mahal Inpainted">
+                        <figcaption>Tower Inpainted</figcaption>
+                    </figure>
+                </div>
+            </div>
+            
+            <h1>Text-Conditioned Image-to-Image Translation</h1>
+            <p>
+                In this section, we will perform the same image-to-image translation as the previous step,
+                but now we will guide the translation using a <b>text prompt</b>. Instead of simply projecting 
+                the image onto the natural image manifold, we introduce text-based control, allowing the model 
+                to generate results aligned with specific language-based instructions.
+            </p>
+
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/rocket_camp_noise_level_1.jpg" alt="Rocket Ship at noise level 1">
+                        <figcaption>Rocket Ship at noise level 1</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/rocket_camp_noise_level_3.jpg" alt="Rocket Ship at noise level 3">
+                        <figcaption>Rocket Ship at noise level 3</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/rocket_camp_noise_level_5.jpg" alt="Rocket Ship at noise level 5">
+                        <figcaption>Rocket Ship at noise level 5</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/rocket_camp_noise_level_7.jpg" alt="Rocket Ship at noise level 7">
+                        <figcaption>Rocket Ship at noise level 7</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/rocket_camp_noise_level_10.jpg" alt="Rocket Ship at noise level 10">
+                        <figcaption>Rocket Ship at noise level 10</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/rocket_camp_noise_level_20.jpg" alt="Rocket Ship at noise level 20">
+                        <figcaption>Rocket Ship at noise level 20</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/campanile.png" alt="Original">
+                        <figcaption>Campanile</figcaption>
+                    </figure>
+                </div>
+            </div>
+
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/rocket_taj_noise_level_1.jpg" alt="Rocket Ship at noise level 1">
+                        <figcaption>Rocket Ship at noise level 1</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/rocket_taj_noise_level_3.jpg" alt="Rocket Ship at noise level 3">
+                        <figcaption>Rocket Ship at noise level 3</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/rocket_taj_noise_level_5.jpg" alt="Rocket Ship at noise level 5">
+                        <figcaption>Rocket Ship at noise level 5</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/rocket_taj_noise_level_7.jpg" alt="Rocket Ship at noise level 7">
+                        <figcaption>Rocket Ship at noise level 7</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/rocket_taj_noise_level_10.jpg" alt="Rocket Ship at noise level 10">
+                        <figcaption>Rocket Ship at noise level 10</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/rocket_taj_noise_level_20.jpg" alt="Rocket Ship at noise level 20">
+                        <figcaption>Rocket Ship at noise level 20</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/taj.jpg" alt="Original">
+                        <figcaption>Taj Mahal</figcaption>
+                    </figure>
+                </div>
+            </div>
+
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/coast_tower_noise_level_1.jpg" alt="Coast at noise level 1">
+                        <figcaption>Coast at noise level 1</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/coast_tower_noise_level_3.jpg" alt="Coast at noise level 3">
+                        <figcaption>Coast at noise level 3</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/coast_tower_noise_level_5.jpg" alt="Coast at noise level 5">
+                        <figcaption>Coast at noise level 5</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/coast_tower_noise_level_7.jpg" alt="Coast at noise level 7">
+                        <figcaption>Coast at noise level 7</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/coast_tower_noise_level_10.jpg" alt="Coast at noise level 10">
+                        <figcaption>Coast at noise level 10</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/coast_tower_noise_level_20.jpg" alt="Coast at noise level 20">
+                        <figcaption>Coast at noise level 20</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/tower.png" alt="Original">
+                        <figcaption>Tower</figcaption>
+                    </figure>
+                </div>
+            </div>
+
+            <h1>Visual Anagrams</h1>
+            <p>
+                In this section, we create <b>Visual Anagrams</b> using diffusion models to generate optical illusions. 
+                The goal is to create an image that resembles one thing when viewed normally, 
+                but transforms into another when flipped upside down.
+            </p>
+
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/anagram_oldman_image.jpg" alt="Old Man">
+                        <figcaption>Old Man</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/anagram_campfire_image.jpg" alt="Campfire">
+                        <figcaption>People Around Campfire</figcaption>
+                    </figure>
+                </div>
+            </div>
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/anagram_coast_image.jpg" alt="Almafi Coast">
+                        <figcaption>Almafi Coast</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/anagram_village_image.jpg" alt="Snowy Village">
+                        <figcaption>Snowy Village</figcaption>
+                    </figure>
+                </div>
+            </div>
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/anagram_dog_image.jpg" alt="Dog">
+                        <figcaption>Dog</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/anagram_man_image.jpg" alt="Man">
+                        <figcaption>Man</figcaption>
+                    </figure>
+                </div>
+            </div>
+
+            <h1>Hybrid Images</h1>
+            <p>
+                In this section, we create <b>Hybrid Images</b> using a technique called 
+                <a href="https://arxiv.org/abs/2404.11615" target="_blank">Factorized Diffusion</a>. Hybrid images are created 
+                by blending low and high-frequency components derived from two separate noise estimates using diffusion models.
+                To create a composite image, we combine the low frequencies from one noise estimate with the high frequencies of another. The resulting hybrid image shows different characteristics depending on the viewing distance.
+            </p>
+            
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/hybrid_skull_image.jpg" alt="Hybrid image of a skull and a waterfall">
+                        <figcaption>Hybrid image of a skull and a waterfall</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/hybrid_hulk_image.jpg" alt="Hybrid image of a Red Hulk's face and a mountain range">
+                        <figcaption>Hybrid image of a Red Hulk's face and a mountain range</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/hybrid_village_image.jpg" alt="Hybrid image of a Snowy Village and an old man's face">
+                        <figcaption>Hybrid image of a Snowy Village and an old man's face</figcaption>
+                    </figure>
+                </div>
+            </div>
+            
+
+        </section>
+    </div>
+
+    <div class="section-wrapper">
+        <section id="warp">
+            <h1>Training a Single-Step Denoising UNet</h1>
+
+            <p>The <strong>Single-Step Denoising UNet</strong> is designed to denoise a noisy image (<code>z</code>), approximating the clean image (<code>x</code>). The process combines a specialized architecture (the UNet) and a noise-injection process for training. Here's an overview:</p>
+            
+            <h3>Forward Process (Generating Training Data)</h3>
+            <p>To train the denoiser, we simulate noisy data by adding noise to clean images (<code>x</code>):</p>
+            <div class="equation">
+                z = x + σ ε, where ε ∼ N(0, I)
+            </div>
+            <p>Here:</p>
+            <ul>
+                <li><code>σ</code> is the noise level, and we vary it across a range (e.g., <code>σ = [0.0, 0.2, 0.4, ...]</code>).</li>
+                <li>This process creates pairs <code>(z, x)</code>, where <code>z</code> is the noisy input, and <code>x</code> is the target.</li>
+            </ul>
+            
+            <h3>Training the UNet</h3>
+            <p>The training objective is to minimize the reconstruction loss between the predicted clean image (<code>hat{x}</code>) and the ground truth (<code>x</code>):</p>
+            <div class="equation">
+                L = E[z, x] || D_θ(z) - x ||²
+            </div>
+            <p>Key Steps:</p>
+            <ul>
+                <li><strong>Input:</strong> The noisy image <code>z</code> and its corresponding clean image <code>x</code>.</li>
+                <li><strong>Prediction:</strong> The UNet outputs <code>hat{x} = D_θ(z)</code>, an estimate of the clean image.</li>
+                <li><strong>Loss:</strong> The L2 loss measures the difference between <code>hat{x}</code> and <code>x</code>.</li>
+                <li><strong>Optimization:</strong> Gradients are backpropagated to update the UNet's parameters.</li>
+            </ul>
+            
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item2">
+                        <img src="assets/noisymnist.png" alt="Varying levels of noise on MNIST digits">
+                        <figcaption>Varying levels of noise on MNIST digits</figcaption>
+                    </figure>
+                </div>
+            </div>
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item2">
+                        <img src="assets/singlestep_training_curve.png" alt="Training Loss Curve">
+                        <figcaption>Training Loss Curve</figcaption>
+                    </figure>
+                </div>
+            </div>
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item2">
+                        <img src="assets/1_epoch_training.png" alt="Results on digits from the test set after 1 epoch of training">
+                        <figcaption>Results on digits from the test set after 1 epoch of training</figcaption>
+                    </figure>
+                </div>
+            </div>
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item2">
+                        <img src="assets/5_epoch_training.png" alt="Results on digits from the test set after 5 epoch of training">
+                        <figcaption>Results on digits from the test set after 5 epoch of training</figcaption>
+                    </figure>
+                </div>
+            </div>
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item2">
+                        <img src="assets/denoising_results.png" alt="Results on digits from the test set with varying noise levels.">
+                        <figcaption>Results on digits from the test set with varying noise levels./figcaption>
+                    </figure>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="section-wrapper">
+        <section id="warp">
+            <h1>High-Level Overview of the Time-Conditioned UNet</h1>
+            <p>The <strong>Time-Conditioned UNet</strong> is an enhancement of the Single-Step Denoising UNet, designed to model the diffusion process iteratively across timesteps. This model is essential in diffusion models, where denoising at each timestep depends on both the input and the timestep itself. Here's an overview:</p>
+            
+            <h2>Forward Process (Training Data Generation)</h2>
+            <p>To train the model, we simulate noisy images at various timesteps using the forward diffusion process:</p>
+            <div class="equation">
+                x_t = sqrt(α̅_t) * x_0 + sqrt(1 - α̅_t) * ε, where ε ∼ N(0, I)
+            </div>
+            <p>Here:</p>
+            <ul>
+                <li><code>x_0</code>: Clean image.</li>
+                <li><code>x_t</code>: Noisy image at timestep <code>t</code>.</li>
+                <li><code>α̅_t</code>: Cumulative product of noise scheduling terms.</li>
+                <li><code>ε</code>: Gaussian noise.</li>
+            </ul>
+            <p>This process creates pairs <code>(x_t, t)</code> where the model learns to predict <code>ε</code>.</p>
+            
+            <h2>Training the Time-Conditioned UNet</h2>
+            <p>The objective of training is to minimize the error in predicting the noise term <code>ε</code>:</p>
+            <div class="equation">
+                L = E[x_t, ε] || ε_θ(x_t, t) - ε ||²
+            </div>
+            <p>Key Steps:</p>
+            <ul>
+                <li><strong>Input:</strong> Noisy image <code>x_t</code> and its timestep <code>t</code>.</li>
+                <li><strong>Output:</strong> The UNet predicts <code>ε_θ(x_t, t)</code>, the noise added to <code>x_0</code> at timestep <code>t</code>.</li>
+                <li><strong>Loss:</strong> L2 loss measures the difference between the predicted and actual noise.</li>
+                <li><strong>Optimization:</strong> Backpropagation updates the UNet's parameters.</li>
+            </ul>
+            
+            <h2>Iterative Denoising (Inference)</h2>
+            <p>During inference, the Time-Conditioned UNet performs iterative denoising starting from pure noise (<code>x_T</code>) and progressing toward the clean image (<code>x_0</code>):</p>
+            <div class="equation">
+                x_t-1 = sqrt(α̅_t-1) / sqrt(α̅_t) * (x_t - sqrt(1 - α̅_t) * ε_θ(x_t, t)) + sqrt(1 - α̅_t-1) * z
+            </div>
+            <p>Here:</p>
+            <ul>
+                <li><code>z</code>: Gaussian noise added for intermediate steps.</li>
+                <li>This formula ensures that the image is gradually denoised step-by-step.</li>
+            </ul>
+            
+            <h2>Summary</h2>
+            <p>The <strong>Time-Conditioned UNet</strong> builds on the standard UNet by conditioning on timesteps, making it suitable for iterative denoising tasks. Its strengths include:</p>
+            <ul>
+                <li><strong>Timestep Adaptation:</strong> Learns to predict noise specific to each timestep.</li>
+                <li><strong>Iterative Denoising:</strong> Gradually refines the noisy image to reconstruct the clean image.</li>
+                <li><strong>Generalization:</strong> Trained on varying noise levels, enabling robustness across timesteps.</li>
+            </ul>
+            
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item2">
+                        <img src="assets/time_training_loss.png" alt="Training Loss Curve">
+                        <figcaption>Training Loss Curve</figcaption>
+                    </figure>
+                </div>
+            </div>
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item2">
+                        <img src="assets/5_epochs_time_sampling_results.png" alt="Epoch 5">
+                        <figcaption>Sampling digits after 5 epoch of training</figcaption>
+                    </figure>
+                </div>
+            </div>
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item2">
+                        <img src="assets/20_epochs_time_sampling_results.png" alt="Epoch 20">
+                        <figcaption>Sampling digits after 20 epoch of training</figcaption>
+                    </figure>
+                </div>
+            </div>
+            
+        </section>
+    </div>
+
+    <div class="section-wrapper">
+        <section id="warp">
+            <h1>High-Level Overview of the Class-Conditioned UNet</h1>
+            <p>The <strong>Class-Conditioned UNet</strong> builds on the foundation of the Time-Conditioned UNet by introducing an additional conditioning mechanism based on image class labels. This model is designed to denoise images while incorporating semantic information about the image class, making it suitable for class-conditional diffusion models. Here's an overview:</p>
+            
+            <h2>Forward Process (Training Data Generation)</h2>
+            <p>To train the model, we simulate noisy images at various timesteps using the forward diffusion process:</p>
+            <div class="equation">
+                x_t = sqrt(α̅_t) * x_0 + sqrt(1 - α̅_t) * ε, where ε ∼ N(0, I)
+            </div>
+            <p>Here:</p>
+            <ul>
+                <li><code>x_0</code>: Clean image.</li>
+                <li><code>x_t</code>: Noisy image at timestep <code>t</code>.</li>
+                <li><code>α̅_t</code>: Cumulative product of noise scheduling terms.</li>
+                <li><code>ε</code>: Gaussian noise.</li>
+            </ul>
+            <p>This process creates pairs <code>(x_t, t, c)</code>, where <code>c</code> is the class label, and the model learns to predict <code>ε</code>.</p>
+            
+            <h2>Training the Class-Conditioned UNet</h2>
+            <p>The objective of training is to minimize the error in predicting the noise term <code>ε</code>:</p>
+            <div class="equation">
+                L = E[x_t, ε, c] || ε_θ(x_t, t, c) - ε ||²
+            </div>
+            <p>Key Steps:</p>
+            <ul>
+                <li><strong>Input:</strong> Noisy image <code>x_t</code>, its timestep <code>t</code>, and class label <code>c</code>.</li>
+                <li><strong>Output:</strong> The UNet predicts <code>ε_θ(x_t, t, c)</code>, the noise added to <code>x_0</code> at timestep <code>t</code> for class <code>c</code>.</li>
+                <li><strong>Loss:</strong> L2 loss measures the difference between the predicted and actual noise.</li>
+                <li><strong>Optimization:</strong> Backpropagation updates the UNet's parameters.</li>
+            </ul>
+            
+            <h2>Classifier-Free Guidance (CFG)</h2>
+            <p>During inference, the Class-Conditioned UNet can leverage Classifier-Free Guidance (CFG) to balance fidelity and diversity:</p>
+            <div class="equation">
+                ε = ε_u + γ (ε_c - ε_u)
+            </div>
+            <p>Here:</p>
+            <ul>
+                <li><code>ε_u</code>: Unconditional noise estimate (no class conditioning).</li>
+                <li><code>ε_c</code>: Class-conditional noise estimate.</li>
+                <li><code>γ</code>: CFG scale that controls the strength of class conditioning.</li>
+            </ul>
+            
+            <h2>Iterative Denoising (Inference)</h2>
+            <p>During inference, the Class-Conditioned UNet performs iterative denoising starting from pure noise (<code>x_T</code>) and progressing toward the clean image (<code>x_0</code>):</p>
+            <div class="equation">
+                x_t-1 = sqrt(α̅_t-1) / sqrt(α̅_t) * (x_t - sqrt(1 - α̅_t) * ε_θ(x_t, t, c)) + sqrt(1 - α̅_t-1) * z
+            </div>
+            <p>Here:</p>
+            <ul>
+                <li><code>z</code>: Gaussian noise added for intermediate steps.</li>
+                <li>This formula ensures that the image is gradually denoised step-by-step while adhering to the specified class.</li>
+            </ul>
+            
+            <h2>Summary</h2>
+            <p>The <strong>Class-Conditioned UNet</strong> builds on the Time-Conditioned UNet by incorporating class-conditioning, making it capable of generating or denoising images conditioned on a specific class. Its strengths include:</p>
+            <ul>
+                <li><strong>Class Awareness:</strong> Learns to predict noise specific to each class label.</li>
+                <li><strong>Timestep Adaptation:</strong> Adapts denoising to the current timestep.</li>
+                <li><strong>Versatility:</strong> Suitable for class-conditional image generation and denoising tasks.</li>
+            </ul>
+            
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item2">
+                        <img src="assets/class_training_loss.png" alt="Training Loss Curve">
+                        <figcaption>Training Loss Curve</figcaption>
+                    </figure>
+                </div>
+            </div>
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item2">
+                        <img src="assets/5_epoch_class_sampling_results.png" alt="Epoch 5">
+                        <figcaption>Sampling digits after 5 epoch of training</figcaption>
+                    </figure>
+                </div>
+            </div>
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item2">
+                        <img src="assets/20_epochs_class_sampling_results.png" alt="Epoch 20">
+                        <figcaption>Sampling digits after 20 epoch of training</figcaption>
+                    </figure>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+</main>
+
+</body>
+</html>
