@@ -82,6 +82,16 @@
             border: 1px solid #ddd;
             border-radius: 5px;
         }
+        .gallery-item3 {
+            max-width: 300px;
+            text-align: center;
+        }
+        .gallery-item3 img {
+            width: 300px;
+            height: 500px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
         .math-container {
             background-color: #f5f5f5;
             padding: 10px;
@@ -92,6 +102,16 @@
             margin-top: 8px;
             font-size: 14px;
             color: #555;
+        }
+        .formula {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            overflow-x: auto;
         }
         
     </style>
@@ -236,7 +256,7 @@
             </div>
 
 
-            <h1>Hyperameter Training</h1>
+            <h1>Hyperameter Tuning</h1>
 
             <p>For the cat images we also tried to two separate sets of Hyperameter configurations. 
                 We tried using double the Layers for one setup and then lowered the learning rate to .0002 for the other setup. 
@@ -351,7 +371,334 @@
         </section>
     </div>
 
+    <div class="section-wrapper">
+        <section id="rays">
+            <h1>Part 2.1: Create Rays from Cameras</h1>
+            <p>In this section, we implemented several functions to compute and transform rays from camera parameters. These functions enable us to move between world, camera, and pixel coordinate systems, which are essential for ray tracing and rendering. The key steps and functions implemented are:</p>
+            <ul>
+                <li><strong>Camera-to-World Transformation:</strong> 
+                    <ul>
+                        <li>We implemented the function <code>transform(c2w, x_c)</code> to transform 3D points from camera coordinates to world coordinates using the camera's extrinsic matrix. The inverse transformation, <code>transform(c2w.inv(), x_w)</code>, converts points from world coordinates back to camera coordinates.</li>
+                        <div class="gallery-container">
+                            <div class="gallery">
+                                <figure class="gallery-item2">
+                                    <img src="assets/Camera2World.png" alt="Camera to World">
+                                    <figcaption>Camera to World</figcaption>
+                                </figure>
+                            </div>
+                        </div>
+                    </ul>
+                </li>
+                <li><strong>Pixel-to-Camera Conversion:</strong>
+                    <ul>
+                        <li>The function <code>pixel_to_camera(K, uv, s)</code> converts 2D pixel coordinates into 3D camera coordinates by leveraging the camera's intrinsic matrix <code>K</code>. This includes calculating depth <code>s = z_c</code> along the optical axis.</li>
+                    </ul>
+                    <div class="gallery-container">
+                        <div class="gallery">
+                            <figure class="gallery-item2">
+                                <img src="assets/IntrinsicMatrix.png" alt="IntrinsicMatrix">
+                                <figcaption>Intrinsic Matrix</figcaption>
+                            </figure>
+                            <figure class="gallery-item2">
+                                <img src="assets/PixelProjection.png" alt="Camera2Pixel">
+                                <figcaption>Camera to Pixel</figcaption>
+                            </figure>
+                        </div>
+                    </div>
+                </li>
+                <li><strong>Pixel-to-Ray Conversion:</strong>
+                    <ul>
+                        <li>We implemented <code>pixel_to_ray(K, c2w, uv)</code>, which generates rays for each pixel. This function computes the ray's origin (<code>r_o</code>) and direction (<code>r_d</code>) in the world coordinate system, normalizing <code>r_d</code> to ensure unit vectors.</li>
+                    </ul>
+                    <div class="gallery-container">
+                        <div class="gallery">
+                            <figure class="gallery-item2">
+                                <img src="assets/orginRay.png" alt="OrginRay">
+                                <figcaption>Orgin Ray</figcaption>
+                            </figure>
+                            <figure class="gallery-item2">
+                                <img src="assets/rayDirection.png" alt="RayDirection">
+                                <figcaption>Ray Direction</figcaption>
+                            </figure>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <p>By implementing these functions, we can efficiently generate and handle rays for rendering tasks.</p>
+    </div>
     
+    <div class="section-wrapper">
+        <section id="sampling">
+            <h1>Part 2.2: Sampling</h1>
+            <p>In this section, we implemented sampling methods to generate rays and points for rendering. These samples form the foundation for training NeRF models and are critical for capturing the 3D structure of scenes. The key steps and functions implemented are:</p>
+            <ul>
+                <li><strong>Sampling Rays from Images:</strong>
+                    <ul>
+                        <li>We extended the ray sampling process to handle multiple images, leveraging camera intrinsics and extrinsics to compute ray origins and directions.</li>
+                        <li>We implemented sampling by
+                            <ul>
+                                <li><strong>Option 1:</strong> Sample <code>M</code> images, then sample <code>N / M</code> rays from each image.</li>
+                                <li><strong>Option 2:</strong> Flatten all pixels across images and perform a global sampling of <code>N</code> rays.</li>
+                            </ul>
+                        </li>
+                        <li>To align ray sampling with the pixel grid, we adjusted UV coordinates to account for the pixel center offset (adding 0.5).</li>
+                    </ul>
+                </li>
+                <li><strong>Sampling Points along Rays:</strong>
+                    <ul>
+                        <li>We discretized each ray into samples along its path in 3D space using the function <code>np.linspace(near, far, n_samples)</code>.</li>
+                        <li>To avoid overfitting, we added random perturbations to the sampled points: <code> t = t + (np.random.rand(t.shape) * t_width)</code></li> 
+                        <li>The batched samples along each ray are calculated using <code>rays_o + rays_d * t</code></li>
+                    </ul>
+                </li>
+            </ul>
+            <p>By implementing these sampling techniques, we ensure that the ray and point distributions provide sufficient coverage of the 3D space, enabling effective training for the NeRF model.</p>
+
+        </section>
+    </div>
+    
+    <div class="section-wrapper">
+        <section id="dset">
+            <h1>2.3: Putting the Dataloading All Together</h1>
+            <p>In this section, we implemented a dataloader that takes in a list of images and a list of cameras and outputs a batch of rays and colors. 
+                As a sanity check we also plotted our data using the vizualization code. The visualization is below:</p>
+                <div class="gallery-container">
+                    <div class="gallery">
+                        <figure class="gallery-item2">
+                            <img src="assets/final_pt_cloud.png" alt="Dataset Visualization">
+                            <figcaption>Dataset Visualization</figcaption>
+                        </figure>
+                    </div>
+                </div>
+        </section>
+    </div>
+
+    <div class="section-wrapper">
+        <section id="nrf">
+            <h1>2.4: Neural Radiance Field</h1>
+            <p>In this section, we extended the MLP from Part 1 to create a Neural Radiance Field (NeRF) that predicts both density and color for 3D samples. The network was modified to handle 3D inputs and view-dependent outputs. The key steps and modifications include:</p>
+            <ul>
+                <li><strong>Input Representation:</strong> 
+                    <ul>
+                        <li>Inputs are now 3D world coordinates (<code>[x, y, z]</code>) and 3D ray directions (<code>[dx, dy, dz]</code>), instead of 2D pixel coordinates.</li>
+                        <li>The ray direction is encoded using positional encoding (PE), but with fewer frequencies <code>L=4</code> compared to coordinate PE (<code>L=10</code>).</li>
+                    </ul>
+                </li>
+                <li><strong>Output Prediction:</strong> 
+                    <ul>
+                        <li>The network predicts both <strong>density</strong> and <strong>RGB color</strong> values for each 3D sample point.</li>
+                        <li>
+                            <ul>
+                                <li><strong>Density:</strong> Constrained to be positive using <code>ReLU</code>.</li>
+                                <li><strong>Color:</strong> Constrained to range [0, 1] using <code>Sigmoid</code>.</li>
+                                <li>Color depends on both the point location and view direction.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><strong>Network Architecture:</strong> Our new network roughly follows the diagram below 
+                          
+                    <div class="gallery-container">
+                        <div class="gallery">
+                            <figure class="gallery-item2">
+                                <img src="assets/mlp_nerf.png" alt="MLP Visualization">
+                                <figcaption>MLP Visualization</figcaption>
+                            </figure>
+                        </div>
+                    </div>
+                        
+                </li>
+        </section>
+    </div>
+
+    <div class="section-wrapper">
+        <section id="volume">
+            <h1>Part 2.5: Volume Rendering</h1>
+            <p>In this section, we implemented the volume rendering equation to compute the color of a ray as it passes through 3D space. This process uses densities and colors predicted by the NeRF and combines them along a ray. The key steps include:</p>
+            <ul>
+                <li><strong>Volume Rendering Equation:</strong>
+                    <ul>
+                        <li>The continuous volume rendering equation integrates the color contributions along a ray, weighted by transmittance and density:</li>
+                        <div class="formula">
+                            C(r) = ∫<sub>t<sub>n</sub></sub><sup>t<sub>f</sub></sup> T(t)σ(r(t))c(r(t), d)dt, where T(t) = exp(-∫<sub>t<sub>n</sub></sub><sup>t</sup>σ(r(s))ds)
+                        </div>
+                        <li>We implemented the discrete approximation for computation:</li>
+                        <div class="formula">
+                            Ĉ(r) = Σ<sub>i=1</sub><sup>N</sup> T<sub>i</sub> (1 - exp(-σ<sub>i</sub>δ<sub>i</sub>))c<sub>i</sub>, where T<sub>i</sub> = exp(-Σ<sub>j=1</sub><sup>i-1</sup> σ<sub>j</sub>δ<sub>j</sub>)
+                        </div>
+                    </ul>
+                </li>
+                <li><strong>Verification:</strong>
+                    <ul>
+                        <li>A test case was implemented to ensure the volume rendering outputs match expected results using a provided assert statement.</li>
+                    </ul>
+                </li>
+            </ul>
+            <p>This implementation ensures that the rendered colors accurately represent the cumulative contributions of densities and colors along each ray, forming the basis for synthesizing images with NeRF.</p>
+
+        </section>
+    </div>
+
+    <div class="section-wrapper">
+        <section id="random">
+            <h1>Final Results</h1>
+            
+            <p>Now we put it all together to produce 3D images!</p>
+            
+
+            <p>Below are the hyperparameters used for training:</p>
+            <ul>
+                <li><strong>Hidden Layers:</strong> __</li>
+                <li><strong>Highest Frequency (L):</strong> __</li>
+                <li><strong>Hidden Neurons per Layer:</strong> __</li>
+                <li><strong>Learning Rate:</strong> __</li>
+                <li><strong>Batch Size:</strong> __</li>
+                <li><strong>Epochs:</strong> __</li>
+            </ul>
+
+            <h3>Training Curve<h3>
+
+                <div class="gallery-container">
+                    <div class="gallery">
+                        <figure class="gallery-item2">
+                            <img src="assets/psnr_curve.png" alt="">
+                            <figcaption></figcaption>
+                        </figure>
+                    </div>
+                </div>
+
+            <h3>Training Process Visualized:</h3>
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/pred_img_0.png" alt="Predicted Image Iteration: 0">
+                        <figcaption>Predicted Image Iteration: 0</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/pred_img_100.png" alt="Predicted Image Iteration: 100">
+                        <figcaption>Predicted Image Iteration: 100</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/pred_img_200.png" alt="Predicted Image Iteration: 200">
+                        <figcaption>Predicted Image Iteration: 200</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/pred_img_300.png" alt="Predicted Image Iteration: 300">
+                        <figcaption>Predicted Image Iteration: 300</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/pred_img_400.png" alt="Predicted Image Iteration: 400">
+                        <figcaption>Predicted Image Iteration: 400</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/pred_img_500.png" alt="Predicted Image Iteration: 500">
+                        <figcaption>Predicted Image Iteration: 500</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/pred_img_600.png" alt="Predicted Image Iteration: 600">
+                        <figcaption>Predicted Image Iteration: 600</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/pred_img_700.png" alt="Predicted Image Iteration: 700">
+                        <figcaption>Predicted Image Iteration: 700</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/pred_img_800.png" alt="Predicted Image Iteration: 800">
+                        <figcaption>Predicted Image Iteration: 800</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/pred_img_900.png" alt="Predicted Image Iteration: 900">
+                        <figcaption>Predicted Image Iteration: 900</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/pred_img_1000.png" alt="Predicted Image Iteration: 1000">
+                        <figcaption>Predicted Image Iteration: 1000</figcaption>
+                    </figure>
+                </div>
+            </div>
+
+            <h3>Validation Process Visualized:</h3>
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/pred_img_0.png" alt="Predicted Image Iteration: 0">
+                        <figcaption>Predicted Image Iteration: 0</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/pred_img_100.png" alt="Predicted Image Iteration: 100">
+                        <figcaption>Predicted Image Iteration: 100</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/pred_img_200.png" alt="Predicted Image Iteration: 200">
+                        <figcaption>Predicted Image Iteration: 200</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/pred_img_300.png" alt="Predicted Image Iteration: 300">
+                        <figcaption>Predicted Image Iteration: 300</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/pred_img_400.png" alt="Predicted Image Iteration: 400">
+                        <figcaption>Predicted Image Iteration: 400</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/pred_img_500.png" alt="Predicted Image Iteration: 500">
+                        <figcaption>Predicted Image Iteration: 500</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/pred_img_600.png" alt="Predicted Image Iteration: 600">
+                        <figcaption>Predicted Image Iteration: 600</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/pred_img_700.png" alt="Predicted Image Iteration: 700">
+                        <figcaption>Predicted Image Iteration: 700</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/pred_img_800.png" alt="Predicted Image Iteration: 800">
+                        <figcaption>Predicted Image Iteration: 800</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/pred_img_900.png" alt="Predicted Image Iteration: 900">
+                        <figcaption>Predicted Image Iteration: 900</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/pred_img_1000.png" alt="Predicted Image Iteration: 1000">
+                        <figcaption>Predicted Image Iteration: 1000</figcaption>
+                    </figure>
+                </div>
+            </div>
+
+            <h3>Spherical Rendering of Lego Truck</h3>
+                    
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item2">
+                        <video controls autoplay loop>
+                            <source src="assets/lego_spherical_render.mp4" type="video/mp4">
+                        </video>
+                    </figure>
+                </div>
+            </div>
+
+        </section>
+    </div>
+
+    <div class="section-wrapper">
+        <section id="dset">
+            <h1>Bells & Whistles: Background Color</h1>
+            
+            <p></p>
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item2">
+                        <video controls autoplay loop>
+                            <source src="assets/lego_spherical_render_color.mp4" type="video/mp4">
+                        </video>
+                    </figure>
+                </div>
+            </div>
+        </section>
+    </div>
+            
 
 </main>
 
