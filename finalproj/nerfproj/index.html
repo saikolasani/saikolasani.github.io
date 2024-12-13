@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neural Radiance Field</title>
+    <script type="text/javascript" async
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.1.0/es5/tex-mml-chtml.js">
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        header {
+            background-color: #000000;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+        }
+        section {
+            padding: 2rem;
+            margin: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        h2 {
+            color: #000000;
+        }
+        .container {
+            display: block; 
+        }
+        .section-wrapper {
+            width: 100%; 
+            padding: 10px;
+        }
+        .image-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .image-container img {
+            width: auto; /* Adjusts the width of the images */
+            height: auto;
+        }
+        .text-box {
+            width: 100px; /* Width of the text box */
+            margin-left: 10px; /* Spacing between the image and the text box */
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .gallery-container {
+            margin: 20px;
+        }
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+        .gallery-item {
+            max-width: 300px;
+            text-align: center;
+        }
+        .gallery-item img {
+            width: 150px;
+            height: 150px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .gallery-item2 {
+            max-width: 300px;
+            text-align: center;
+        }
+        .gallery-item2 img {
+            width: 300px;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .math-container {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        figcaption {
+            margin-top: 8px;
+            font-size: 14px;
+            color: #555;
+        }
+        
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Final Project: Neural Radiance Field!</h1>
+    <h1>By Avidan Shah and Sai Kolasani</h1>
+</header>
+
+<main class="container">
+    <div class="section-wrapper">
+        <section id="introduction">
+            <h1>Introduction</h1>
+            <p>A neural radiance field (NeRF) is a neural network that can reconstruct complex three-dimensional scenes from a partial set of two-dimensional images. 
+                The NeRF learns the scene geometry, objects, and angles of a particular scene. Then it renders photorealistic 3D views from novel viewpoints, automatically generating synthetic data to fill in gaps.
+                In this project we implement NeRF from scratch.
+            </p>
+        </section>
+    </div>
+
+    <div class="section-wrapper">
+        <section id="random">
+            <h1>Part 1: Fit a Neural Field to a 2D Image</h1>
+            
+            <p>This section focuses on implementing a <span class="highlight">Neural Field</span> to map 2D pixel coordinates to RGB pixel values using a <span class="highlight">Multilayer Perceptron (MLP)</span> with sinusoidal positional encoding.</p>
+            <p>The MLP learns to reconstruct the target 2D image by predicting pixel colors based on sampled input coordinates. To achieve this, we:</p>
+            <ul>
+                <li>Implemented a <span class="highlight">sinusoidal positional encoding</span> layer to enhance input representation.</li>
+                <li>Built a dataloader to randomly sample pixel coordinates and colors for efficient training.</li>
+                <li>Trained the network using <span class="highlight">mean squared error (MSE)</span> loss and evaluated quality with <span class="highlight">Peak Signal-to-Noise Ratio (PSNR)</span>.</li>
+                <li>Experimented with hyperparameters like the number of layers, hidden units, and learning rate to optimize performance.</li>
+            </ul>
+            <p>Through this process, we gained a deeper understanding of neural fields and their ability to fit and reconstruct 2D data.</p>
+            
+            <h1>Fox</h1>
+
+            <p>Below are the hyperparameters used for training:</p>
+            <ul>
+                <li><strong>Hidden Layers:</strong> __</li>
+                <li><strong>Highest Frequency (L):</strong> __</li>
+                <li><strong>Hidden Neurons per Layer:</strong> __</li>
+                <li><strong>Learning Rate:</strong> __</li>
+                <li><strong>Batch Size:</strong> __</li>
+                <li><strong>Epochs:</strong> __</li>
+            </ul>
+
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/defaultfox0iter.png" alt="Fox Iteration: 0">
+                        <figcaption>Fox Iteration: 0</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/defaultfox200iter.png" alt="Fox Iteration: 200">
+                        <figcaption>Fox Iteration: 200</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/defaultfox400iter.png" alt="Fox Iteration: 400">
+                        <figcaption>Fox Iteration: 400</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/defaultfox600iter.png" alt="Fox Iteration: 600">
+                        <figcaption>Fox Iteration: 600</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/defaultfox1000iter.png" alt="Fox Iteration: 1000">
+                        <figcaption>Fox Iteration: 1000</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/fox.jpg" alt="Orignal Fox">
+                        <figcaption>Original Fox</figcaption>
+                    </figure>
+                    
+                </div>
+            </div>
+
+            <p>PSNR vs Epoch Training Curve<p>
+
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item2">
+                        <img src="assets/defaultfoxpsnr.png" alt="">
+                        <figcaption></figcaption>
+                    </figure>
+                </div>
+            </div>
+
+            <h1>Cat</h1>
+
+            <p>Below are the hyperparameters used for training:</p>
+            <ul>
+                <li><strong>Hidden Layers:</strong> __</li>
+                <li><strong>Highest Frequency (L):</strong> __</li>
+                <li><strong>Hidden Neurons per Layer:</strong> __</li>
+                <li><strong>Learning Rate:</strong> __</li>
+                <li><strong>Batch Size:</strong> __</li>
+                <li><strong>Epochs:</strong> __</li>
+            </ul>
+
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/cat0iter.png" alt="Cat Iteration: 0">
+                        <figcaption>Cat Iteration: 0</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/cat200iter.png" alt="Cat Iteration: 200">
+                        <figcaption>Cat Iteration: 200</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/cat400iter.png" alt="Cat Iteration: 400">
+                        <figcaption>Cat Iteration: 400</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/cat600iter.png" alt="Cat Iteration: 600">
+                        <figcaption>Cat Iteration: 600</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/cat1000iter.png" alt="Cat Iteration: 1000">
+                        <figcaption>Cat Iteration: 1000</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/cat.jpg" alt="Orignal Cat">
+                        <figcaption>Original Cat</figcaption>
+                    </figure>
+                    
+                </div>
+            </div>
+
+            <p>PSNR vs Epoch Training Curve<p>
+
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item2">
+                        <img src="assets/catpsnr.png" alt="psnr curve">
+                        <figcaption></figcaption>
+                    </figure>
+                </div>
+            </div>
+
+
+            <h1>Hyperameter Training</h1>
+
+            <p>For the cat images we also tried to two separate sets of Hyperameter configurations. 
+                We tried using double the Layers for one setup and then lowered the learning rate to .0002 for the other setup. 
+                Both sets of results are below:</p>
+            
+            <h3>Double Layers</h3>
+
+            <p>Below are the hyperparameters used for training:</p>
+            <ul>
+                <li><strong>Hidden Layers:</strong> __</li>
+                <li><strong>Highest Frequency (L):</strong> __</li>
+                <li><strong>Hidden Neurons per Layer:</strong> __</li>
+                <li><strong>Learning Rate:</strong> __</li>
+                <li><strong>Batch Size:</strong> __</li>
+                <li><strong>Epochs:</strong> __</li>
+            </ul>
+
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/cat0iterdouble.png" alt="Cat Iteration: 0">
+                        <figcaption>Cat Iteration: 0</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/cat200iterdouble.png" alt="Cat Iteration: 200">
+                        <figcaption>Cat Iteration: 200</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/cat400iterdouble.png" alt="Cat Iteration: 400">
+                        <figcaption>Cat Iteration: 400</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/cat600iterdouble.png" alt="Cat Iteration: 600">
+                        <figcaption>Cat Iteration: 600</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/cat1000iterdouble.png" alt="Cat Iteration: 1000">
+                        <figcaption>Cat Iteration: 1000</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/cat.jpg" alt="Orignal Cat">
+                        <figcaption>Original Cat</figcaption>
+                    </figure>
+                    
+                </div>
+            </div>
+
+            <p>PSNR vs Epoch Training Curve<p>
+
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item2">
+                        <img src="assets/catdoublepsnr.png" alt="psnr curve">
+                        <figcaption></figcaption>
+                    </figure>
+                </div>
+            </div>
+
+
+            <h3>Lower Learning Rate</h3>
+            
+            <p>Below are the hyperparameters used for training:</p>
+            <ul>
+                <li><strong>Hidden Layers:</strong> __</li>
+                <li><strong>Highest Frequency (L):</strong> __</li>
+                <li><strong>Hidden Neurons per Layer:</strong> __</li>
+                <li><strong>Learning Rate:</strong> __</li>
+                <li><strong>Batch Size:</strong> __</li>
+                <li><strong>Epochs:</strong> __</li>
+            </ul>
+
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item">
+                        <img src="assets/cat0iterlowlr.png" alt="Cat Iteration: 0">
+                        <figcaption>Cat Iteration: 0</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/cat200iterlowlr.png" alt="Cat Iteration: 200">
+                        <figcaption>Cat Iteration: 200</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/cat400iterlowlr.png" alt="Cat Iteration: 400">
+                        <figcaption>Cat Iteration: 400</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/cat600iterlowlr.png" alt="Cat Iteration: 600">
+                        <figcaption>Cat Iteration: 600</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/cat1000iterlowlr.png" alt="Cat Iteration: 1000">
+                        <figcaption>Cat Iteration: 1000</figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <img src="assets/cat.jpg" alt="Orignal Cat">
+                        <figcaption>Original Cat</figcaption>
+                    </figure>
+                    
+                </div>
+            </div>
+
+            <p>PSNR vs Epoch Training Curve<p>
+
+            <div class="gallery-container">
+                <div class="gallery">
+                    <figure class="gallery-item2">
+                        <img src="assets/catlowiterpsnr.png" alt="psnr curve">
+                        <figcaption></figcaption>
+                    </figure>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    
+
+</main>
+
+</body>
+</html>
