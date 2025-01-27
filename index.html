@@ -49,26 +49,66 @@
             font-weight: 500;
         }
 
-        .profile-section {
+        .page-layout {
             display: flex;
             gap: 3rem;
             margin-top: 2rem;
         }
 
+        .sidebar {
+            width: 150px;
+            flex-shrink: 0;
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+            align-self: flex-start;
+        }
+
         .profile-image {
-            width: 400px;
-            height: auto;
-            border-radius: 0;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
             object-fit: cover;
+            margin-bottom: 1rem;
         }
 
-        .profile-content {
+        .name-title {
+            margin: 1rem 0;
+        }
+
+        .name-title h1 {
+            margin: 0;
+            font-size: 2rem;
+            color: #4f4f4f;
+        }
+
+        .name-title p {
+            margin: 0.5rem 0;
+            color: #666;
+        }
+
+        .contact-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .contact-links a {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #4f4f4f;
+            text-decoration: none;
+        }
+
+        .main-content {
             flex: 1;
+            max-width: 800px;
         }
 
-        .profile-content p {
-            font-size: 1.1rem;
-            margin-bottom: 1.5rem;
+        .main-content h2 {
+            color: #4f4f4f;
+            margin-top: 0;
         }
 
         a {
@@ -79,6 +119,12 @@
         a:hover {
             text-decoration: underline;
         }
+
+        .contact-links a svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
     </style>
 </head>
 
@@ -87,67 +133,100 @@
         <div class="container">
             <a href="/" class="site-title">Sai Kolasani</a>
             <div class="nav-links">
-                <a href="https://github.com/saikolasani">GitHub</a>
-                <a href="https://www.linkedin.com/in/saikolasani/">LinkedIn</a>
-                <a href="mailto:saikolasani@berkeley.edu">Email</a>
+                <a href="research.html">Research</a>
                 <a href="assets/SaiKolasaniResume_MS.pdf">CV</a>
             </div>
         </div>
     </nav>
 
     <div class="container">
-        <div class="profile-section">
-            <img src="assets/Headshot.png" alt="Sai Kolasani" class="profile-image">
-            <div class="profile-content">
+        <div class="page-layout">
+            <div class="sidebar">
+                <img src="assets/Headshot.png" alt="Sai Kolasani" class="profile-image">
+                <div class="name-title">
+                    <h3>Sai Kolasani</h3>
+                    <p>CS & Stats @ Berkeley</p>
+                </div>
+                <div class="contact-links">
+                    <a href="/">🏛️ UC Berkeley</a>
+                    <a href="mailto:saikolasani@berkeley.edu">✉️ Email</a>
+                    <a href="https://github.com/saikolasani">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
+                        </svg>
+                        Github
+                    </a>
+                    <a href="https://www.linkedin.com/in/saikolasani/">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                        </svg>
+                        LinkedIn
+                    </a>
+                </div>
+            </div>
+            <div class="main-content">
+                <h2>About Me</h2>
                 <p>
-                    I am a 4th year undergraduate student at UC Berkeley, pursuing a Bachelor of Arts in Computer
-                    Science
-                    and Statistics with a minor in Public Policy. My work spans artificial intelligence, machine
-                    learning systems, and their applications in optimizing workflows, improving user experiences, and
-                    addressing long-term AI safety challenges.
+                    Hey, I'm Sai. I'm currently a 4th-year undergrad at UC Berkeley, pursuing a Bachelor of Arts in
+                    Computer Science and Statistics with a minor in Public Policy. I am broadly interested in artificial
+                    intelligence and machine learning systems. More specifically i'm interested in building open source
+                    frameworks, improving the reliability of AI workflows, and advancing long-term AI safety through
+                    emotion-aware and adaptive systems.
                 </p>
                 <p>
                     I am currently conducting research with the Sky Computing Lab at Berkeley, where I co-developed
-                    Agent Arena, an interactive platform for evaluating and comparing LLM-based agents. I am also
-                    spearheading the development of Avior, a compositional framework for constructing compound AI
-                    systems, enabling scalable, modular workflows across networks of models.
+                    Agent Arena, an interactive platform for evaluating and comparing LLM-based agents, under the
+                    guidance of Shishir Patil and Joseph Gonzalez. I am also leading the development of Ember, a
+                    compositional framework for constructing Compound AI Systems and "Networks of Networks" (NONs),
+                    advised by Jared Davis and Matei Zaharia. Alongside my research, I work as an Investment Research
+                    Analyst at Kindred Ventures, where I evaluate early-stage startups in AI, SaaS, and digital health,
+                    identifying transformative technologies and market disruptors.
+
+
                 </p>
+                <p>
+                    In the past, I have had the opportunity to work on impactful projects across various organizations.
+                    At Arize AI (Summer 2024), I focused on improving the efficiency and scalability of demo models by
+                    modularizing code and implementing automated updates, significantly enhancing system reliability. At
+                    DataStax (Spring 2024), I contributed to the first enterprise release of Langflow, integrating Astra
+                    DB for embedding generation and adding support for new models and tools to simplify developer
+                    workflows.
+                </p>
+
+                <section id="projects">
+                    <h2>Featured Projects</h2>
+                    <ul>
+                        <li><strong><a href="https://gorilla.cs.berkeley.edu/blogs/14_agent_arena.html">Agent
+                                    Arena:</a></strong> An interactive platform for evaluating and comparing LLM-based
+                            agents. Agent Arena provides a systematic way to assess agent capabilities through
+                            battle-based comparisons, featuring a novel ranking algorithm and a prompt hub for sharing
+                            agent workflows</li>
+                        <li><strong><a href="https://github.com/jaredquincy/ember/tree/main">Ember:</a></strong> A
+                            compositional framework for constructing Compound AI Systems and Networks of Networks
+                            (NONs), focusing on scalable and modular AI workflows</li>
+                        <li><strong><a href="https://github.com/LAISR-Cornell/emotion-tune">Emotion-tune:</a></strong> A
+                            project focused on improving RLHF with emotion-based feedback. Built on EMILI (Emotionally
+                            Intelligent Listener), it uses real-time facial emotion recognition to enhance AI
+                            interactions and advance long-term AI safety through emotion-aware systems</li>
+                    </ul>
+                </section>
+
+                <section id="interests">
+                    <h2>Other Interests</h2>
+                    <p>
+                        Beyond my professional work, I enjoy:
+                    </p>
+                    <ul>
+                        <li>Sports: Golf, Basketball, Tennis, Pickleball, Snowboarding</li>
+                        <li>Games: Poker, Video Games, Anime</li>
+                        <li>Music: R&B, House, Hip-Hop</li>
+                        <li>NBA: Boston Celtics</li>
+                    </ul>
+                </section>
             </div>
         </div>
-    </div>
-
-    <div class="container">
-        <section id="research">
-            <h2>Research Interests</h2>
-            <ul>
-                <li>Generative AI: Working on projects like BitmojiGAN for generating synthetic images</li>
-                <li>Large Language Models: Contributing to projects like Gorilla for function calling in LLMs</li>
-                <li>RAG Applications: Experience with frameworks like RAGStack and Langflow for building AI applications
-                </li>
-                <li>Emotion-based AI: Research on improving RLHF with emotion-based feedback</li>
-            </ul>
-        </section>
-
-        <section id="projects">
-            <h2>Featured Projects</h2>
-            <ul>
-                <li><strong>BitmojiGAN:</strong> Developing deep convolutional GANs for generating Bitmoji images</li>
-                <li><strong>Emotion-tune:</strong> Research on improving RLHF with emotion-based feedback</li>
-                <li><strong>Hailstone Project:</strong> Mathematics and data science research at UC Berkeley</li>
-            </ul>
-        </section>
-
-        <section id="interests">
-            <h2>Other Interests</h2>
-            <p>
-                Beyond my professional work, I'm passionate about:
-            </p>
-            <ul>
-                <li>Open Source Development</li>
-                <li>Mathematics and Data Science</li>
-                <li>AI Ethics and Responsible AI Development</li>
-            </ul>
-        </section>
     </div>
 </body>
 

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research - Sai Kolasani</title>
+    <style>
+        /* Copy the same styles from index.html */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        nav {
+            background-color: #fff;
+            padding: 1rem 0;
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .site-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #000;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: #4A76E8;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        a {
+            color: #4A76E8;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .research-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .research-section {
+            margin-bottom: 3rem;
+        }
+
+        .paper {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .paper:last-child {
+            border-bottom: none;
+        }
+
+        .page-layout {
+            display: flex;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+
+        .sidebar {
+            width: 150px;
+            flex-shrink: 0;
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+            align-self: flex-start;
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .sidebar-nav a {
+            color: #4f4f4f;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .sidebar-nav a:hover {
+            color: #4A76E8;
+        }
+
+        .content {
+            flex: 1;
+            max-width: 800px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="container">
+            <a href="/" class="site-title">Sai Kolasani</a>
+            <div class="nav-links">
+                <a href="research.html">Research</a>
+                <a href="assets/SaiKolasaniResume_MS.pdf">CV</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-layout">
+            <div class="sidebar">
+                <div class="sidebar-nav">
+                    <a href="#publications">Publications</a>
+                    <a href="#current-projects">Current Projects</a>
+                </div>
+            </div>
+
+            <div class="content">
+                <h1>Research</h1>
+
+                <div class="research-section" id="publications">
+                    <h2>Publications</h2>
+
+                    <div class="paper">
+                        <h3>Agent Arena: Evaluating and Comparing LLM Agents Across Models, Tools, and Frameworks</h3>
+                        <p>Nithik Yekollu, Arth Bohra, Ashwin Chirumamilla, Kai Wen, Sai Kolasani, Wei-Lin Chiang,
+                            Anastasios Angelopoulos, Joseph E. Gonzalez, Ion Stoica, Shishir G. Patil</p>
+                        <p>Berkeley AI Research Blog, 2024</p>
+                        <p>
+                            [<a href="https://gorilla.cs.berkeley.edu/blogs/14_agent_arena.html">Paper</a>]
+                        </p>
+                    </div>
+
+                    <div class="paper">
+                        <h3>Predicting Stock Movement Using Sentiment Analysis of Twitter Feed with Neural Networks</h3>
+                        <p>Sai Kolasani, Rida Assaf</p>
+                        <p>Journal of Data Analysis and Information Processing, 2020</p>
+                        <p>
+                            [<a href="https://www.scirp.org/pdf/jdaip_2020111613521357.pdf">Paper</a>]
+                        </p>
+                    </div>
+                </div>
+
+                <div class="research-section" id="current-projects">
+                    <h2>Current Projects</h2>
+
+                    <div class="paper">
+                        <h3>Agent Arena</h3>
+                        <p>An interactive platform for evaluating and comparing LLM-based agents. The project introduces
+                            a
+                            novel battle-based comparison framework and ranking algorithm for systematic assessment of
+                            agent
+                            capabilities.</p>
+                        <p><strong>Collaborators:</strong> Shishir Patil, Joseph Gonzalez</p>
+                        <p><a href="https://gorilla.cs.berkeley.edu/blogs/14_agent_arena.html">Project Page</a></p>
+                    </div>
+
+                    <div class="paper">
+                        <h3>Ember: Compositional AI Systems</h3>
+                        <p>A framework for constructing Compound AI Systems and Networks of Networks (NONs), enabling
+                            scalable and modular AI workflows. The project focuses on improving the reliability and
+                            composability of AI systems.</p>
+                        <p><strong>Collaborators:</strong> Jared Davis, Matei Zaharia</p>
+                        <p><a href="https://github.com/jaredquincy/ember/tree/main">GitHub</a></p>
+                    </div>
+
+                    <div class="paper">
+                        <h3>Emotion-tune</h3>
+                        <p>Research on improving RLHF with emotion-based feedback, built on EMILI (Emotionally
+                            Intelligent
+                            Listener). The project uses real-time facial emotion recognition to enhance AI interactions
+                            and
+                            advance long-term AI safety.</p>
+                        <p><a href="https://github.com/LAISR-Cornell/emotion-tune">GitHub</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
