@@ -27,23 +27,46 @@
 
         .header-content {
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
-            gap: 2rem;
+            gap: 1rem;
+            max-width: 300px;
+            /* Match image width */
+            margin: 0 auto;
+        }
+
+        .profile-container {
+            display: flex;
+            gap: 3rem;
+            align-items: flex-start;
+        }
+
+        .left-column {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
         }
 
         .profile-image {
-            width: 200px;
-            height: 200px;
+            width: 300px;
+            height: auto;
             border-radius: 4px;
             object-fit: cover;
             border: 1px solid #eee;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
+        .about-content {
+            flex: 1;
+        }
+
+        .about-content h2 {
+            margin-top: 0;
+        }
+
         .name-title {
-            text-align: left;
-            flex-grow: 1;
+            text-align: center;
         }
 
         .social-links {
@@ -105,33 +128,38 @@
             <a href="https://github.com/saikolasani">GitHub</a>
             <a href="https://www.linkedin.com/in/saikolasani/">LinkedIn</a>
             <a href="mailto:saikolasani@berkeley.edu">Email</a>
-            <a href="./assets/resume.pdf">Resume</a>
+            <a href="assets/SaiKolasaniResume_MS.pdf">CV</a>
         </div>
     </nav>
 
     <header>
         <div class="container">
-            <div class="header-content">
-                <img src="assets/Headshot.png" alt="Sai Kolasani" class="profile-image">
-                <div class="name-title">
-                    <h1>Sai Kolasani</h1>
-                    <p>Computer Science and Statistics @ UC Berkeley</p>
+            <div class="profile-container">
+                <div class="left-column">
+                    <div class="name-title">
+                        <h1>Sai Kolasani</h1>
+                        <p>Computer Science and Statistics @ UC Berkeley</p>
+                    </div>
+                    <img src="assets/Headshot.png" alt="Sai Kolasani" class="profile-image">
+                </div>
+                <div class="about-content">
+                    <h2>About Me</h2>
+                    <p>
+                        I am an undergraduate student at UC Berkeley, pursuing a Bachelor of Arts in Statistics and
+                        Computer Science with a minor in Public Policy. My work spans artificial intelligence, machine
+                        learning systems, and their applications in optimizing workflows, improving user experiences,
+                        and addressing long-term AI safety challenges. I am currently conducting research with the Sky
+                        Computing Lab at Berkeley, where I co-developed Agent Arena, an interactive platform for
+                        evaluating and comparing LLM-based agents. I am also spearheading the development of Avior, a
+                        compositional framework for constructing compound AI systems, enabling scalable, modular
+                        workflows across networks of models.
+                    </p>
                 </div>
             </div>
         </div>
     </header>
 
     <div class="container">
-        <section id="about">
-            <h2>About Me</h2>
-            <p>
-                Welcome to my personal website! I am Sai Kolasani, a Computer Science student and researcher passionate
-                about artificial intelligence and machine learning. I'm actively involved in developing and contributing
-                to various AI/ML projects, with a particular focus on generative AI and RAG (Retrieval Augmented
-                Generation) applications.
-            </p>
-        </section>
-
         <section id="research">
             <h2>Research Interests</h2>
             <ul>
