@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sai Kolasani - Personal Website</title>
+    <title>Sai Kolasani</title>
+    <link rel="preload" as="image" href="assets/Headshot.png">
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -70,6 +71,7 @@
             border-radius: 50%;
             object-fit: cover;
             margin-bottom: 1rem;
+            background-color: #f0f0f0;
         }
 
         .name-title {
@@ -134,6 +136,7 @@
             <a href="/" class="site-title">Sai Kolasani</a>
             <div class="nav-links">
                 <a href="research.html">Research</a>
+                <a href="courses.html">Courses</a>
                 <a href="assets/SaiKolasaniResume_MS.pdf">CV</a>
             </div>
         </div>
@@ -142,7 +145,8 @@
     <div class="container">
         <div class="page-layout">
             <div class="sidebar">
-                <img src="assets/Headshot.png" alt="Sai Kolasani" class="profile-image">
+                <img src="assets/Headshot.png" alt="Sai Kolasani" class="profile-image" loading="lazy" width="150"
+                    height="150">
                 <div class="name-title">
                     <h3>Sai Kolasani</h3>
                     <p>CS & Stats @ Berkeley</p>
